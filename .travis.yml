@@ -1,0 +1,12 @@
+language: java
+jdk: openjdk11
+env:
+  global:
+install: skip
+script: mvn --settings .mvn/settings.xml install && ([[ $TRAVIS_BRANCH != "master" ]] || mvn --settings .mvn/settings.xml -DskipTests=true deploy)
+cache:
+  directories: "$HOME/.m2"
+branches:
+  except: gh-pages
+notifications:
+  email: joerg.hohwiller@googlemail.com
