@@ -2,6 +2,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.rpc.client;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import io.github.mmm.marshall.StructuredFormatFactory;
@@ -52,7 +54,26 @@ public interface RpcClient {
    * @param failureConsumer is the explicit {@link #getDefaultFailureConsumer() failure consumer}.
    * @param format the explicit {@link #getDefaultFormat() data format}.
    */
-  <R> void call(RpcRequest<R> request, Consumer<R> successConsumer, Consumer<Throwable> failureConsumer, String format);
+  default <R> void call(RpcRequest<R> request, Consumer<R> successConsumer, Consumer<Throwable> failureConsumer,
+      String format) {
+
+    call(request, successConsumer, failureConsumer, format, Collections.emptyMap());
+  }
+
+  /**
+   * This method invokes the given {@link RpcRequest}.
+   *
+   * @param <R> type of the result.
+   * @param request is the {@link RpcRequest} to invoke.
+   * @param successConsumer is the {@link Consumer} that is asynchronously {@link Consumer#accept(Object) invoked} on
+   *        success with when the response of the invoked {@link RpcRequest}. {@link java.lang.reflect.Method} has been
+   *        received.
+   * @param failureConsumer is the explicit {@link #getDefaultFailureConsumer() failure consumer}.
+   * @param format the explicit {@link #getDefaultFormat() data format}.
+   * @param headers the explicit HTTP headers to send with the request (e.g. for authentication).
+   */
+  <R> void call(RpcRequest<R> request, Consumer<R> successConsumer, Consumer<Throwable> failureConsumer, String format,
+      Map<String, String> headers);
 
   /**
    * Same as {@link #call(RpcRequest, Consumer)} but using the default failure callback.

@@ -6,6 +6,8 @@ module io.github.mmm.rpc.server.java {
 
   requires transitive io.github.mmm.rpc;
 
+  requires servlet.api;
+
   exports io.github.mmm.rpc.server.java;
 
 }
