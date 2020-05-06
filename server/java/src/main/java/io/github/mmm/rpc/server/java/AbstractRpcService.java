@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.ServiceLoader;
 
 import io.github.mmm.base.exception.DuplicateObjectException;
+import io.github.mmm.base.exception.ObjectNotFoundException;
 import io.github.mmm.marshall.Marshalling;
 import io.github.mmm.marshall.StructuredFormat;
 import io.github.mmm.marshall.StructuredFormatFactory;
@@ -17,11 +18,12 @@ import io.github.mmm.marshall.StructuredReader;
 import io.github.mmm.marshall.StructuredWriter;
 import io.github.mmm.rpc.request.RpcRequest;
 import io.github.mmm.rpc.server.RpcHandler;
+import io.github.mmm.rpc.server.RpcService;
 
 /**
- *
+ * Abstract base implementation of {@link RpcService}.
  */
-public class RpcService {
+public class AbstractRpcService implements RpcService {
 
   private final Map<Class<?>, RpcHandler<?, ?>> request2handlerMap;
 
@@ -31,7 +33,7 @@ public class RpcService {
    * The constructor.
    */
   @SuppressWarnings("rawtypes")
-  protected RpcService() {
+  protected AbstractRpcService() {
 
     super();
     this.request2handlerMap = new HashMap<>();
@@ -70,21 +72,14 @@ public class RpcService {
     return path + '@' + method;
   }
 
-  /**
-   * @param method the HTTP method.
-   * @param path the {@link RpcRequest#getPath() request path}.
-   * @param format the {@link StructuredFormatProvider#getName() format name}.
-   * @param requestReader the {@link Reader} to read the request from.
-   * @param responseWriter the {@link Writer} to write the response to.
-   */
+  @Override
   @SuppressWarnings({ "rawtypes", "unchecked" })
   public void handle(String method, String path, String format, Reader requestReader, Writer responseWriter) {
 
     String key = createPathMethod(path, method);
     RpcHandler handler = this.pathMethod2handlerMap.get(key);
     if (handler == null) {
-      // TODO not found (404)?
-      throw new IllegalArgumentException();
+      throw new ObjectNotFoundException(RpcHandler.class, key);
     }
     handle(handler, format, requestReader, responseWriter);
   }
@@ -107,19 +102,14 @@ public class RpcService {
     }
   }
 
-  /**
-   * @param <R> type of the response.
-   * @param request the {@link RpcRequest} to handle.
-   * @return the response for the given {@code request}.
-   */
+  @Override
   @SuppressWarnings({ "rawtypes", "unchecked" })
   public <R> R handle(RpcRequest<R> request) {
 
     Class<?> requestClass = request.getClass();
     RpcHandler handler = this.request2handlerMap.get(requestClass);
     if (handler == null) {
-      // TODO not found (404)?
-      throw new IllegalArgumentException();
+      throw new ObjectNotFoundException(RpcHandler.class, requestClass);
     }
     return (R) handler.handle(request);
   }

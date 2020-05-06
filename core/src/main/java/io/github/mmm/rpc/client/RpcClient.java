@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 
 import io.github.mmm.marshall.StructuredFormatFactory;
 import io.github.mmm.marshall.StructuredFormatProvider;
+import io.github.mmm.rpc.client.impl.RpcClientProvider;
 import io.github.mmm.rpc.request.RpcRequest;
 
 /**
@@ -95,6 +96,14 @@ public interface RpcClient {
   default void call(RpcRequest<Void> request) {
 
     call(request, null, getDefaultFailureConsumer(), getDefaultFormat());
+  }
+
+  /**
+   * @return the instance of this {@link RpcClient}.
+   */
+  static RpcClient get() {
+
+    return RpcClientProvider.CLIENT;
   }
 
 }

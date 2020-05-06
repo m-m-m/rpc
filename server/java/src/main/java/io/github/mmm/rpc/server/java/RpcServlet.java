@@ -9,8 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import io.github.mmm.rpc.server.RpcService;
+
 /**
- * {@link HttpServlet} exposing {@link RpcService}.
+ * {@link HttpServlet} exposing {@link AbstractRpcService}.
  *
  * @since 1.0.0
  */
