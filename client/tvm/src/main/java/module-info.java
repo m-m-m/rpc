@@ -6,4 +6,8 @@ module io.github.mmm.rpc.client.tvm {
 
   requires transitive io.github.mmm.rpc;
 
+  requires transitive org.teavm.jso;
+
+  requires transitive org.teavm.jso.apis;
+
 }

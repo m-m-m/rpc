@@ -13,7 +13,7 @@ public interface RpcServiceDiscovery {
 
   /**
    * @param request the {@link RpcRequest}.
-   * @param format the {@link StructuredFormatProvider#getName() format name} used for marshalling and unmarshaling the
+   * @param format the {@link StructuredFormatProvider#getId() format name} used for marshalling and unmarshaling the
    *        data (request and response).
    * @return the URL of the service handling the given {@link RpcRequest}.
    */
@@ -24,8 +24,7 @@ public interface RpcServiceDiscovery {
    */
   static RpcServiceDiscovery get() {
 
-    // TODO
-    return null;
+    return io.github.mmm.rpc.impl.RpcServiceDiscoveryProvider.DISCOVERY;
   }
 
 }

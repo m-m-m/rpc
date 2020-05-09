@@ -25,7 +25,7 @@ public interface RpcService {
   /**
    * @param method the HTTP method.
    * @param path the {@link RpcRequest#getPath() request path}.
-   * @param format the {@link StructuredFormatProvider#getName() format name}.
+   * @param format the {@link StructuredFormatProvider#getId() format name}.
    * @param requestReader the {@link Reader} to read the request from.
    * @param responseWriter the {@link Writer} to write the response to.
    */

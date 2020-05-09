@@ -1,0 +1,108 @@
+/* Copyright (c) The m-m-m Team, Licensed under the Apache License, Version 2.0
+ * http://www.apache.org/licenses/LICENSE-2.0 */
+package io.github.mmm.rpc.client.java;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublisher;
+import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpRequest.Builder;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
+
+import io.github.mmm.base.i18n.Localizable;
+import io.github.mmm.marshall.MarshallingObject;
+import io.github.mmm.marshall.StructuredFormat;
+import io.github.mmm.rpc.client.AbstractRpcInvocation;
+import io.github.mmm.rpc.client.RpcInvocation;
+import io.github.mmm.rpc.request.RpcRequest;
+import io.github.mmm.rpc.request.RpcServiceDiscovery;
+import io.github.mmm.rpc.response.RpcDataResponse;
+import io.github.mmm.rpc.response.RpcException;
+import io.github.mmm.rpc.response.RpcNetworkException;
+
+/**
+ * Implementation of {@link RpcInvocation} for Java.
+ *
+ * @param <R> type of the {@link RpcDataResponse#getData() response data}.
+ * @since 1.0.0
+ */
+public class RpcInvocationJava<R> extends AbstractRpcInvocation<R> {
+
+  private final HttpClient httpClient;
+
+  private HttpRequest httpRequest;
+
+  /**
+   * The constructor.
+   *
+   * @param request the {@link RpcRequest} to send.
+   * @param serviceDiscovery the {@link RpcServiceDiscovery} to create the URL.
+   * @param format the default {@link StructuredFormat}.
+   * @param errorHandler the default {@link #errorHandler(Consumer) error handler}.
+   * @param headers the default {@link #headers(Map) headers}.
+   * @param httpClient the {@link HttpClient} instance.
+   */
+  @SuppressWarnings("exports")
+  public RpcInvocationJava(RpcRequest<R> request, RpcServiceDiscovery serviceDiscovery, StructuredFormat format,
+      Consumer<RpcException> errorHandler, Map<String, String> headers, HttpClient httpClient) {
+
+    super(request, serviceDiscovery, format, errorHandler, headers);
+    this.httpClient = httpClient;
+  }
+
+  @Override
+  protected void prepareSend() {
+
+    super.prepareSend();
+    Builder builder = HttpRequest.newBuilder(URI.create(this.url));
+    for (Entry<String, String> entry : this.headers.entrySet()) {
+      builder = builder.header(entry.getKey(), entry.getValue());
+    }
+    MarshallingObject requestMarshalling = this.request.getRequestMarshalling();
+    String payload = null;
+    if (requestMarshalling != null) {
+      payload = this.format.write(requestMarshalling);
+    }
+    BodyPublisher body = BodyPublishers.ofString(payload);
+    this.httpRequest = builder.method(this.request.getMethod(), body).build();
+  }
+
+  @Override
+  public void sendAsync(Consumer<RpcDataResponse<R>> responseHandler) {
+
+    prepareSend();
+    CompletableFuture<HttpResponse<String>> future = this.httpClient.sendAsync(this.httpRequest,
+        BodyHandlers.ofString());
+    future.thenAccept(response -> {
+      ResponseHeaders responseHeaders = new ResponseHeaders(response.headers());
+      createResponse(response.statusCode(), null, response.body(), responseHeaders, true, responseHandler);
+    }).exceptionally(error -> {
+      // TODO
+      RpcNetworkException rpcException = new RpcNetworkException(Localizable.ofStatic(error.getLocalizedMessage()),
+          error);
+      this.errorHandler.accept(rpcException);
+      return null;
+    });
+  }
+
+  @Override
+  public RpcDataResponse<R> sendSync() {
+
+    prepareSend();
+    try {
+      this.httpClient.send(this.httpRequest, BodyHandlers.ofString());
+      // TODO Auto-generated method stub
+      return null;
+    } catch (Exception error) {
+      // TODO
+      throw new RpcNetworkException(Localizable.ofStatic(error.getLocalizedMessage()), error);
+    }
+  }
+
+}

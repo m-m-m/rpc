@@ -6,11 +6,13 @@ import io.github.mmm.marshall.Marshalling;
 import io.github.mmm.marshall.MarshallingObject;
 
 /**
- * This is the interface for a command that represents a specific operation of an RPC service.
+ * Request of an RPC service. It acts as command of the command-pattern that represents a specific operation of the
+ * service to invoke.
  *
- * @param <R> type of the result of the operation represented by this command.
+ * @param <R> type of the {@link io.github.mmm.rpc.response.RpcDataResponse#getData() response data} for this request.
+ *        May be {@link Void} for no result.
  * @since 1.0.0
- * @see io.github.mmm.rpc.client.RpcClient#call(RpcRequest, java.util.function.Consumer)
+ * @see io.github.mmm.rpc.client.RpcClient#call(RpcRequest)
  * @see io.github.mmm.rpc.server.RpcHandler#handle(RpcRequest)
  */
 public interface RpcRequest<R> {

@@ -2,13 +2,6 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.rpc.client;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.function.Consumer;
-
-import io.github.mmm.marshall.StructuredFormatFactory;
-import io.github.mmm.marshall.StructuredFormatProvider;
-import io.github.mmm.rpc.client.impl.RpcClientProvider;
 import io.github.mmm.rpc.request.RpcRequest;
 
 /**
@@ -19,83 +12,24 @@ import io.github.mmm.rpc.request.RpcRequest;
 public interface RpcClient {
 
   /**
-   * @return the default {@link Consumer} to {@link Consumer#accept(Object) handle} {@link Throwable errors}. A failure
-   *         {@link Consumer} is {@link Consumer#accept(Object) invoked} asynchronously on failure with the
-   *         {@link Throwable} that occurred when {@link io.github.mmm.rpc.server.RpcHandler#handle(RpcRequest)
-   *         handling} the {@link RpcRequest}.
-   */
-  Consumer<Throwable> getDefaultFailureConsumer();
-
-  /**
-   * ATTENTION: This is a global setting that will influence your application. Only use this method from bootstrapping
-   * code setting up your application but never call this from a (reusable) module or library called after
-   * bootstrapping.
+   * Prepares an {@link RpcInvocation} that can be completed by any {@code send*} method such as
+   * {@link RpcInvocation#sendAsync(java.util.function.Consumer)}.
    *
-   * @param defaultFailureConsumer the new value of {@link #getDefaultFailureConsumer()}.
+   * @param <R> type of the {@link io.github.mmm.rpc.response.RpcDataResponse#getData() response data}.
+   * @param request the {@link RpcRequest}.
+   * @return the {@link RpcInvocation} to configure additional options and finally
+   *         {@link RpcInvocation#sendAsync(java.util.function.Consumer) send} the request.
    */
-  void setDefaultFailureConsumer(Consumer<Throwable> defaultFailureConsumer);
+  <R> RpcInvocation<R> call(RpcRequest<R> request);
 
   /**
-   * @return the default {@link StructuredFormatProvider#getName() format} used for marshalling and unmarshaling the
-   *         data (request and response).
-   */
-  default String getDefaultFormat() {
-
-    return StructuredFormatFactory.NAME_JSON;
-  }
-
-  /**
-   * This method invokes the given {@link RpcRequest}.
+   * Immediately invokes the given {@link RpcRequest} ignoring the response.
    *
-   * @param <R> type of the result.
-   * @param request is the {@link RpcRequest} to invoke.
-   * @param successConsumer is the {@link Consumer} that is asynchronously {@link Consumer#accept(Object) invoked} on
-   *        success with when the response of the invoked {@link RpcRequest}. {@link java.lang.reflect.Method} has been
-   *        received.
-   * @param failureConsumer is the explicit {@link #getDefaultFailureConsumer() failure consumer}.
-   * @param format the explicit {@link #getDefaultFormat() data format}.
+   * @param request the {@link RpcRequest} with {@link Void} response data.
    */
-  default <R> void call(RpcRequest<R> request, Consumer<R> successConsumer, Consumer<Throwable> failureConsumer,
-      String format) {
+  default void sendAsync(RpcRequest<Void> request) {
 
-    call(request, successConsumer, failureConsumer, format, Collections.emptyMap());
-  }
-
-  /**
-   * This method invokes the given {@link RpcRequest}.
-   *
-   * @param <R> type of the result.
-   * @param request is the {@link RpcRequest} to invoke.
-   * @param successConsumer is the {@link Consumer} that is asynchronously {@link Consumer#accept(Object) invoked} on
-   *        success with when the response of the invoked {@link RpcRequest}. {@link java.lang.reflect.Method} has been
-   *        received.
-   * @param failureConsumer is the explicit {@link #getDefaultFailureConsumer() failure consumer}.
-   * @param format the explicit {@link #getDefaultFormat() data format}.
-   * @param headers the explicit HTTP headers to send with the request (e.g. for authentication).
-   */
-  <R> void call(RpcRequest<R> request, Consumer<R> successConsumer, Consumer<Throwable> failureConsumer, String format,
-      Map<String, String> headers);
-
-  /**
-   * Same as {@link #call(RpcRequest, Consumer)} but using the default failure callback.
-   *
-   * @param <R> type of the result.
-   * @param request is the {@link RpcRequest} to invoke.
-   * @param successConsumer is the {@link Consumer} that is asynchronously {@link Consumer#accept(Object) invoked} on
-   *        success with when the response of the invoked {@link RpcRequest}. {@link java.lang.reflect.Method} has been
-   *        received.
-   */
-  default <R> void call(RpcRequest<R> request, Consumer<R> successConsumer) {
-
-    call(request, successConsumer, getDefaultFailureConsumer(), getDefaultFormat());
-  }
-
-  /**
-   * @param request the {@link RpcRequest}
-   */
-  default void call(RpcRequest<Void> request) {
-
-    call(request, null, getDefaultFailureConsumer(), getDefaultFormat());
+    call(request).sendAsync(null);
   }
 
   /**
@@ -103,7 +37,7 @@ public interface RpcClient {
    */
   static RpcClient get() {
 
-    return RpcClientProvider.CLIENT;
+    return io.github.mmm.rpc.impl.RpcClientProvider.CLIENT;
   }
 
 }

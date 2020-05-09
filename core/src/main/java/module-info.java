@@ -15,9 +15,13 @@ module io.github.mmm.rpc {
 
   uses io.github.mmm.rpc.client.RpcClient;
 
+  uses io.github.mmm.rpc.request.RpcServiceDiscovery;
+
   exports io.github.mmm.rpc.client;
 
   exports io.github.mmm.rpc.request;
+
+  exports io.github.mmm.rpc.response;
 
   exports io.github.mmm.rpc.server;
 

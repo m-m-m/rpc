@@ -8,6 +8,9 @@ module io.github.mmm.rpc.client.java {
 
   requires transitive io.github.mmm.rpc;
 
+  provides io.github.mmm.rpc.client.RpcClient with //
+      io.github.mmm.rpc.client.java.RpcClientJava;
+
   exports io.github.mmm.rpc.client.java;
 
 }
