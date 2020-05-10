@@ -14,30 +14,6 @@ import io.github.mmm.marshall.MarshallingObject;
  */
 public abstract class RpcRequestBean<R> extends Bean implements RpcRequest<R> {
 
-  /** {@link #getMethod() Method} {@value}. */
-  public static final String METHOD_POST = "POST";
-
-  /** {@link #getMethod() Method} {@value}. */
-  public static final String METHOD_GET = "GET";
-
-  /** {@link #getMethod() Method} {@value}. */
-  public static final String METHOD_DELETE = "DELETE";
-
-  /**
-   * @return the method to use (when sending via HTTP[S]).
-   */
-  @Override
-  public String getMethod() {
-
-    return METHOD_POST;
-  }
-
-  /**
-   * @return the (relative) path of this command.
-   */
-  @Override
-  public abstract String getPath();
-
   /**
    * The constructor.
    */

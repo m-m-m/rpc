@@ -29,6 +29,9 @@ public interface RpcInvocation<R> {
   /** HTTP {@link #header(String, String) header} {@value}. */
   String HEADER_CONTENT_TYPE = "Content-Type";
 
+  /** HTTP {@link #header(String, String) header} {@value}. */
+  String HEADER_AUTHORIZATION = "Authorization";
+
   /**
    * @param format the {@link io.github.mmm.marshall.StructuredFormat#getId() format} used for marshalling and
    *        unmarshaling the data (request and response). E.g. {@link io.github.mmm.marshall.StructuredFormat#ID_JSON}

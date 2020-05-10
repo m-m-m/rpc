@@ -39,6 +39,8 @@ public class RpcErrorData implements MarshallableObject, UnmarshallableObject {
   public RpcErrorData() {
 
     super();
+    this.code = "RpcError";
+    this.technical = true;
   }
 
   /**
