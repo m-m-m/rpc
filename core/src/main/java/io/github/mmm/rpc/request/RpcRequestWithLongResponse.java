@@ -7,6 +7,8 @@ import io.github.mmm.marshall.standard.DatatypeMarshalling;
 
 /**
  * {@link RpcRequest} returning a {@link Long} as response.
+ *
+ * @since 1.0.0
  */
 public interface RpcRequestWithLongResponse extends RpcRequest<Long> {
 

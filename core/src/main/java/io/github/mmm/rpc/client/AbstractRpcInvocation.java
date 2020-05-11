@@ -9,11 +9,11 @@ import java.util.function.Consumer;
 import io.github.mmm.base.i18n.Localizable;
 import io.github.mmm.marshall.Marshalling;
 import io.github.mmm.marshall.StructuredFormat;
-import io.github.mmm.rpc.impl.RpcErrorData;
 import io.github.mmm.rpc.request.RpcRequest;
 import io.github.mmm.rpc.request.RpcServiceDiscovery;
 import io.github.mmm.rpc.response.AttributeReadHttpHeader;
 import io.github.mmm.rpc.response.RpcDataResponse;
+import io.github.mmm.rpc.response.RpcErrorData;
 import io.github.mmm.rpc.response.RpcException;
 import io.github.mmm.rpc.response.RpcParseException;
 import io.github.mmm.rpc.response.RpcResponse;
@@ -22,15 +22,15 @@ import io.github.mmm.rpc.response.RpcResponseException;
 /**
  * Abstract base implementation of {@link RpcInvocation}.
  *
- * @param <R> type of the {@link RpcDataResponse#getData() response data}.
+ * @param <D> type of the {@link RpcDataResponse#getData() response data}.
  * @since 1.0.0
  */
-public abstract class AbstractRpcInvocation<R> implements RpcInvocation<R> {
+public abstract class AbstractRpcInvocation<D> implements RpcInvocation<D> {
 
   private static final String DEFAULT_ENCODING = "utf-8";
 
   /** The {@link RpcRequest} to send. */
-  protected final RpcRequest<R> request;
+  protected final RpcRequest<D> request;
 
   /** The {@link RpcServiceDiscovery} to create the URL. */
   protected final RpcServiceDiscovery serviceDiscovery;
@@ -56,7 +56,7 @@ public abstract class AbstractRpcInvocation<R> implements RpcInvocation<R> {
    * @param errorHandler the default {@link #errorHandler(Consumer) error handler}.
    * @param headers the default {@link #headers(Map) headers}.
    */
-  public AbstractRpcInvocation(RpcRequest<R> request, RpcServiceDiscovery serviceDiscovery, StructuredFormat format,
+  public AbstractRpcInvocation(RpcRequest<D> request, RpcServiceDiscovery serviceDiscovery, StructuredFormat format,
       Consumer<RpcException> errorHandler, Map<String, String> headers) {
 
     super();
@@ -68,7 +68,7 @@ public abstract class AbstractRpcInvocation<R> implements RpcInvocation<R> {
   }
 
   @Override
-  public RpcInvocation<R> format(StructuredFormat newFormat) {
+  public RpcInvocation<D> format(StructuredFormat newFormat) {
 
     Objects.requireNonNull(newFormat, "format");
     this.format = newFormat;
@@ -76,7 +76,7 @@ public abstract class AbstractRpcInvocation<R> implements RpcInvocation<R> {
   }
 
   @Override
-  public RpcInvocation<R> errorHandler(Consumer<RpcException> newErrorHandler) {
+  public RpcInvocation<D> errorHandler(Consumer<RpcException> newErrorHandler) {
 
     Objects.requireNonNull(newErrorHandler, "errorHandler");
     this.errorHandler = newErrorHandler;
@@ -84,14 +84,14 @@ public abstract class AbstractRpcInvocation<R> implements RpcInvocation<R> {
   }
 
   @Override
-  public RpcInvocation<R> header(String key, String value) {
+  public RpcInvocation<D> header(String key, String value) {
 
     this.headers.put(key, value);
     return this;
   }
 
   @Override
-  public RpcInvocation<R> headers(Map<String, String> httpHeaders) {
+  public RpcInvocation<D> headers(Map<String, String> httpHeaders) {
 
     this.headers.putAll(httpHeaders);
     return this;
@@ -121,16 +121,16 @@ public abstract class AbstractRpcInvocation<R> implements RpcInvocation<R> {
    * @return the {@link RpcResponse}.
    * @throws RpcException in case of an error.
    */
-  protected RpcDataResponse<R> createResponse(int status, String statusText, Object payload,
-      AttributeReadHttpHeader responseHeaders, boolean async, Consumer<RpcDataResponse<R>> responseHandler) {
+  protected RpcDataResponse<D> createResponse(int status, String statusText, Object payload,
+      AttributeReadHttpHeader responseHeaders, boolean async, Consumer<RpcDataResponse<D>> responseHandler) {
 
     RpcException error = null;
-    RpcDataResponse<R> response = null;
+    RpcDataResponse<D> response = null;
     if (isSuccess(status)) {
-      R data = null;
-      Marshalling<R> marshalling = this.request.getResponseMarshalling();
+      D data = null;
+      Marshalling<D> marshalling = this.request.getResponseMarshalling();
       if (marshalling != null) {
-        if ((payload != null) && (!async || (responseHandler != null))) {
+        if (!isEmpty(payload) && (!async || (responseHandler != null))) {
           try {
             data = marshalling.readObject(this.format.reader(payload));
           } catch (RuntimeException cause) {
@@ -157,10 +157,9 @@ public abstract class AbstractRpcInvocation<R> implements RpcInvocation<R> {
         if (statusText == null) {
           message = statusText(status);
         }
-        message = status + ":" + message;
       }
-      error = new RpcResponseException(Localizable.ofStatic(message), status, responseHeaders, errorData.isTechnical(),
-          errorData.getCode(), errorData.getUuid());
+      error = new RpcResponseException(Localizable.ofStatic(status + ":" + message), status, responseHeaders,
+          errorData.isTechnical(), errorData.getCode(), errorData.getUuid());
     }
     if (error != null) {
       if (async) {
@@ -174,6 +173,16 @@ public abstract class AbstractRpcInvocation<R> implements RpcInvocation<R> {
       responseHandler.accept(response);
     }
     return response;
+  }
+
+  private boolean isEmpty(Object o) {
+
+    if (o == null) {
+      return true;
+    } else if ("".equals(o)) {
+      return true;
+    }
+    return false;
   }
 
   /**

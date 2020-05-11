@@ -9,6 +9,8 @@ import io.github.mmm.marshall.standard.DatatypeMarshalling;
 
 /**
  * {@link RpcRequest} returning a {@link Instant} as response.
+ *
+ * @since 1.0.0
  */
 public interface RpcRequestWithInstantResponse extends RpcRequest<Instant> {
 

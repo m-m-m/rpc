@@ -96,9 +96,11 @@ public class RpcInvocationJava<R> extends AbstractRpcInvocation<R> {
 
     prepareSend();
     try {
-      this.httpClient.send(this.httpRequest, BodyHandlers.ofString());
-      // TODO Auto-generated method stub
-      return null;
+      HttpResponse<String> response = this.httpClient.send(this.httpRequest, BodyHandlers.ofString());
+      ResponseHeaders responseHeaders = new ResponseHeaders(response.headers());
+      return createResponse(response.statusCode(), null, response.body(), responseHeaders, false, null);
+    } catch (RpcException error) {
+      throw error;
     } catch (Exception error) {
       // TODO
       throw new RpcNetworkException(Localizable.ofStatic(error.getLocalizedMessage()), error);

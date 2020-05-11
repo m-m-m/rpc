@@ -9,13 +9,13 @@ import io.github.mmm.marshall.MarshallingObject;
  * Request of an RPC service. It acts as command of the command-pattern that represents a specific operation of the
  * service to invoke.
  *
- * @param <R> type of the {@link io.github.mmm.rpc.response.RpcDataResponse#getData() response data} for this request.
+ * @param <D> type of the {@link io.github.mmm.rpc.response.RpcDataResponse#getData() response data} for this request.
  *        May be {@link Void} for no result.
  * @since 1.0.0
  * @see io.github.mmm.rpc.client.RpcClient#call(RpcRequest)
  * @see io.github.mmm.rpc.server.RpcHandler#handle(RpcRequest)
  */
-public interface RpcRequest<R> {
+public interface RpcRequest<D> {
 
   /** {@link #getMethod() Method} {@value}. */
   public static final String METHOD_POST = "POST";
@@ -53,6 +53,6 @@ public interface RpcRequest<R> {
   /**
    * @return the {@link Marshalling} for the response of this request.
    */
-  Marshalling<R> getResponseMarshalling();
+  Marshalling<D> getResponseMarshalling();
 
 }

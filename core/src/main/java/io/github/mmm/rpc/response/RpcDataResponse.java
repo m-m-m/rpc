@@ -5,16 +5,16 @@ package io.github.mmm.rpc.response;
 /**
  * Implementation of {@link RpcResponse} for success with {@link #getData() unmarshalled response data}.
  *
- * @param <R> type of {@link #getData() data}.
+ * @param <D> type of {@link #getData() data}.
  * @since 1.0.0
  */
-public class RpcDataResponse<R> implements RpcResponse {
+public class RpcDataResponse<D> implements RpcResponse {
 
   private final int status;
 
   private final AttributeReadHttpHeader headers;
 
-  private final R data;
+  private final D data;
 
   /**
    * The constructor.
@@ -23,7 +23,7 @@ public class RpcDataResponse<R> implements RpcResponse {
    * @param headers the HTTP headers.
    * @param data the {@link #getData() data}.
    */
-  public RpcDataResponse(int status, AttributeReadHttpHeader headers, R data) {
+  public RpcDataResponse(int status, AttributeReadHttpHeader headers, D data) {
 
     super();
     this.status = status;
@@ -53,7 +53,7 @@ public class RpcDataResponse<R> implements RpcResponse {
    * @return the data received. May be {@code null} if no data is transmitted (e.g. if {@link #getStatus() status} is
    *         204 = no content)}.
    */
-  public R getData() {
+  public D getData() {
 
     return this.data;
   }

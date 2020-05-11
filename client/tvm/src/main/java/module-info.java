@@ -10,4 +10,7 @@ module io.github.mmm.rpc.client.tvm {
 
   requires transitive org.teavm.jso.apis;
 
+  provides io.github.mmm.rpc.client.RpcClient with //
+      io.github.mmm.rpc.client.tvm.RpcClientTvm;
+
 }

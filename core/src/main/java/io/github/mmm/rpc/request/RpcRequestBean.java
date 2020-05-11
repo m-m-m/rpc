@@ -9,10 +9,11 @@ import io.github.mmm.marshall.MarshallingObject;
 /**
  * Implementation of {@link RpcRequest} as {@link Bean}.
  *
- * @param <R> type of the result of the operation represented by this command.
+ * @param <D> type of the {@link io.github.mmm.rpc.response.RpcDataResponse#getData() response data} for this request.
+ *        May be {@link Void} for no result.
  * @since 1.0.0
  */
-public abstract class RpcRequestBean<R> extends Bean implements RpcRequest<R> {
+public abstract class RpcRequestBean<D> extends Bean implements RpcRequest<D> {
 
   /**
    * The constructor.

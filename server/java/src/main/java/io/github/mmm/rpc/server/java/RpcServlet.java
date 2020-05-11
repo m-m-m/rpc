@@ -37,8 +37,10 @@ public class RpcServlet extends HttpServlet {
   protected void service(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    String path = // request.getPathInfo();
-        request.getRequestURI().substring(request.getContextPath().length());
+    String path = request.getPathInfo();
+    if (path == null) {
+      path = request.getRequestURI().substring(request.getContextPath().length());
+    }
     String contentType;
     contentType = request.getContentType();
     if (contentType == null) {
@@ -51,7 +53,8 @@ public class RpcServlet extends HttpServlet {
         contentType = contentType.substring(0, index);
       }
     }
-    this.rpcService.handle(request.getMethod(), path, contentType, request.getReader(), response.getWriter());
+    this.rpcService.handle(request.getMethod(), path, contentType, request.getReader(), response.getWriter(),
+        new HttpStatusSender(response));
   }
 
 }

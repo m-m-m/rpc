@@ -15,10 +15,10 @@ import io.github.mmm.rpc.response.RpcResponse;
 /**
  * Interface for fluent API calls from {@link RpcClient}.
  *
- * @param <R> type of the {@link io.github.mmm.rpc.response.RpcDataResponse#getData() response data}.
+ * @param <D> type of the {@link io.github.mmm.rpc.response.RpcDataResponse#getData() response data}.
  * @since 1.0.0
  */
-public interface RpcInvocation<R> {
+public interface RpcInvocation<D> {
 
   /** HTTP {@link #header(String, String) header} {@value}. */
   String HEADER_ACCEPT = "Accept";
@@ -39,7 +39,7 @@ public interface RpcInvocation<R> {
    * @return this object for fluent API calls.
    * @see AbstractRpcClient#getDefaultFormat()
    */
-  default RpcInvocation<R> format(String format) {
+  default RpcInvocation<D> format(String format) {
 
     return format(StructuredFormatFactory.get().create(format));
   }
@@ -51,7 +51,7 @@ public interface RpcInvocation<R> {
    * @return this object for fluent API calls.
    * @see AbstractRpcClient#getDefaultFormat()
    */
-  RpcInvocation<R> format(StructuredFormat format);
+  RpcInvocation<D> format(StructuredFormat format);
 
   /**
    * Configures an explicit HTTP header to send with the request (e.g. for authentication).
@@ -62,7 +62,7 @@ public interface RpcInvocation<R> {
    * @see #headers(Map)
    * @see AbstractRpcClient#setDefaultHeader(String, String)
    */
-  RpcInvocation<R> header(String key, String value);
+  RpcInvocation<D> header(String key, String value);
 
   /**
    * Configures explicit HTTP headers to send with the request (e.g. for authentication).
@@ -71,7 +71,7 @@ public interface RpcInvocation<R> {
    * @return this object for fluent API calls.
    * @see #header(String, String)
    */
-  default RpcInvocation<R> headers(Map<String, String> headers) {
+  default RpcInvocation<D> headers(Map<String, String> headers) {
 
     for (Entry<String, String> entry : headers.entrySet()) {
       header(entry.getKey(), entry.getValue());
@@ -85,7 +85,7 @@ public interface RpcInvocation<R> {
    * @return this object for fluent API calls.
    * @see AbstractRpcClient#getDefaultErrorHandler()
    */
-  RpcInvocation<R> errorHandler(Consumer<RpcException> errorHandler);
+  RpcInvocation<D> errorHandler(Consumer<RpcException> errorHandler);
 
   /**
    * Terminating operation to send this invocation asynchronously to the server.
@@ -94,7 +94,7 @@ public interface RpcInvocation<R> {
    *        after successful transmission. In case of an error the {@link #errorHandler(Consumer) error handler} is
    *        called instead.
    */
-  void sendAsync(Consumer<RpcDataResponse<R>> responseHandler);
+  void sendAsync(Consumer<RpcDataResponse<D>> responseHandler);
 
   /**
    * Terminating operation to send this invocation asynchronously to the server. Use {@link #sendAsync(Consumer)}
@@ -105,9 +105,9 @@ public interface RpcInvocation<R> {
    *        {@link RpcDataResponse#getData() response data} after successful transmission. In case of an error the
    *        {@link #errorHandler(Consumer) error handler} is called instead.
    */
-  default void sendAsyncData(Consumer<R> resultHandler) {
+  default void sendAsyncData(Consumer<D> resultHandler) {
 
-    Consumer<RpcDataResponse<R>> successConsumer = r -> r.getData();
+    Consumer<RpcDataResponse<D>> successConsumer = r -> r.getData();
     sendAsync(successConsumer);
   }
 
@@ -120,5 +120,5 @@ public interface RpcInvocation<R> {
    * @throws io.github.mmm.rpc.response.RpcException if the service failed on the server-side or the service-side could
    *         not be reached due to network issues.
    */
-  RpcDataResponse<R> sendSync();
+  RpcDataResponse<D> sendSync();
 }

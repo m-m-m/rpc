@@ -28,7 +28,32 @@ public interface RpcService {
    * @param format the {@link StructuredFormatProvider#getId() format name}.
    * @param requestReader the {@link Reader} to read the request from.
    * @param responseWriter the {@link Writer} to write the response to.
+   * @param statusSender the reciver of the HTTP status.
+   * @return the HTTP status code. It has also been {@link StatusSender#sendStatus(int) send} via the given
+   *         {@link StatusSender}.
    */
-  void handle(String method, String path, String format, Reader requestReader, Writer responseWriter);
+  int handle(String method, String path, String format, Reader requestReader, Writer responseWriter,
+      StatusSender statusSender);
+
+  /**
+   * Interface to send the status (abstracting {@code HttpResponse}).
+   */
+  @FunctionalInterface
+  interface StatusSender {
+
+    /**
+     * @param status the HTTP status to send.
+     */
+    default void sendStatus(int status) {
+
+      sendStatus(status, null);
+    }
+
+    /**
+     * @param status the HTTP status to send.
+     * @param statusText the optional status text.
+     */
+    void sendStatus(int status, String statusText);
+  }
 
 }

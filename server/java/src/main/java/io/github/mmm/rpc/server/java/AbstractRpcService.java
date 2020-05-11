@@ -8,15 +8,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ServiceLoader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.github.mmm.base.exception.ApplicationException;
 import io.github.mmm.base.exception.DuplicateObjectException;
 import io.github.mmm.base.exception.ObjectNotFoundException;
+import io.github.mmm.marshall.MarshallableObject;
 import io.github.mmm.marshall.Marshalling;
 import io.github.mmm.marshall.StructuredFormat;
 import io.github.mmm.marshall.StructuredFormatFactory;
-import io.github.mmm.marshall.StructuredFormatProvider;
 import io.github.mmm.marshall.StructuredReader;
 import io.github.mmm.marshall.StructuredWriter;
+import io.github.mmm.nls.exception.TechnicalErrorUserException;
 import io.github.mmm.rpc.request.RpcRequest;
+import io.github.mmm.rpc.response.RpcErrorData;
 import io.github.mmm.rpc.server.RpcHandler;
 import io.github.mmm.rpc.server.RpcService;
 
@@ -25,6 +31,8 @@ import io.github.mmm.rpc.server.RpcService;
  */
 public class AbstractRpcService implements RpcService {
 
+  private static final Logger LOG = LoggerFactory.getLogger(AbstractRpcService.class);
+
   private final Map<Class<?>, RpcHandler<?, ?>> request2handlerMap;
 
   private final Map<String, RpcHandler<?, ?>> pathMethod2handlerMap;
@@ -32,22 +40,31 @@ public class AbstractRpcService implements RpcService {
   /**
    * The constructor.
    */
-  @SuppressWarnings("rawtypes")
   protected AbstractRpcService() {
 
     super();
     this.request2handlerMap = new HashMap<>();
     this.pathMethod2handlerMap = new HashMap<>();
-    ServiceLoader<RpcHandler> serviceLoader = ServiceLoader.load(RpcHandler.class);
-    for (RpcHandler<?, ?> handler : serviceLoader) {
-      register(handler);
+  }
+
+  /**
+   * Initializes this service via Service-Loader.
+   */
+  @SuppressWarnings("rawtypes")
+  protected void init() {
+
+    if (this.request2handlerMap.isEmpty()) {
+      ServiceLoader<RpcHandler> serviceLoader = ServiceLoader.load(RpcHandler.class);
+      for (RpcHandler<?, ?> handler : serviceLoader) {
+        register(handler);
+      }
     }
   }
 
   /**
    * @param handler the {@link RpcHandler} to register.
    */
-  private void register(RpcHandler<?, ?> handler) {
+  protected void register(RpcHandler<?, ?> handler) {
 
     RpcRequest<?> request = handler.createRequest();
     Class<?> requestClass = request.getClass();
@@ -74,44 +91,78 @@ public class AbstractRpcService implements RpcService {
 
   @Override
   @SuppressWarnings({ "rawtypes", "unchecked" })
-  public void handle(String method, String path, String format, Reader requestReader, Writer responseWriter) {
+  public int handle(String method, String path, String format, Reader requestReader, Writer responseWriter,
+      StatusSender statusSender) {
 
+    RpcHandler handler = getHandler(method, path);
+    return handle(handler, format, requestReader, responseWriter, statusSender);
+  }
+
+  @SuppressWarnings({ "rawtypes" })
+  private RpcHandler getHandler(String method, String path) {
+
+    init();
     String key = createPathMethod(path, method);
     RpcHandler handler = this.pathMethod2handlerMap.get(key);
     if (handler == null) {
-      throw new ObjectNotFoundException(RpcHandler.class, key);
+      throw new ObjectNotFoundException(RpcHandler.class.getSimpleName(), key);
     }
-    handle(handler, format, requestReader, responseWriter);
+    return handler;
   }
 
-  private <RSP, REQ extends RpcRequest<RSP>> void handle(RpcHandler<RSP, REQ> handler, String format,
-      Reader requestReader, Writer responseWriter) {
+  private <D, R extends RpcRequest<D>> int handle(RpcHandler<D, R> handler, String format, Reader requestReader,
+      Writer responseWriter, StatusSender statusSender) {
 
-    REQ request = handler.createRequest();
-    StructuredFormatProvider provider = StructuredFormatFactory.get().getProvider(format);
-    StructuredFormat formatBuilder = provider.create();
-    StructuredReader reader = formatBuilder.reader(requestReader);
-    request.getRequestMarshalling().read(reader);
-    try {
-      RSP response = handler.handle(request);
-      Marshalling<RSP> marshalling = request.getResponseMarshalling();
-      StructuredWriter writer = formatBuilder.writer(responseWriter);
-      marshalling.writeObject(writer, response);
+    R request = handler.createRequest();
+    StructuredFormat structuredFormat = StructuredFormatFactory.get().create(format);
+    StructuredReader reader = structuredFormat.reader(requestReader);
+    int status = 200;
+    try (StructuredWriter writer = structuredFormat.writer(responseWriter)) {
+      request.getRequestMarshalling().read(reader);
+      D response = handler.handle(request);
+      if (response == null) {
+        status = 204;
+        statusSender.sendStatus(status);
+      } else {
+        if (response instanceof MarshallableObject) {
+          ((MarshallableObject) response).write(writer);
+        } else {
+          Marshalling<D> marshalling = request.getResponseMarshalling();
+          if (marshalling == null) {
+            throw new ObjectNotFoundException("responseMarshalling", request.getClass().getName());
+          }
+          marshalling.writeObject(writer, response);
+        }
+      }
     } catch (Throwable t) {
-      // TODO: write error response...
+      ApplicationException userError = TechnicalErrorUserException.convert(t);
+      LOG.error("RpcHandler {} failed:", handler.getClass().getName(), userError);
+      RpcErrorData errorData = RpcErrorData.of(userError);
+      String error = structuredFormat.write(errorData);
+      status = 500;
+      statusSender.sendStatus(status, error);
     }
+    return status;
   }
 
   @Override
   @SuppressWarnings({ "rawtypes", "unchecked" })
   public <R> R handle(RpcRequest<R> request) {
 
-    Class<?> requestClass = request.getClass();
+    Class<? extends RpcRequest> requestClass = request.getClass();
+    RpcHandler handler = getHandler(requestClass);
+    return (R) handler.handle(request);
+  }
+
+  @SuppressWarnings({ "rawtypes", "unchecked" })
+  private <R, C extends RpcRequest<R>> RpcHandler<R, C> getHandler(Class<C> requestClass) {
+
+    init();
     RpcHandler handler = this.request2handlerMap.get(requestClass);
     if (handler == null) {
-      throw new ObjectNotFoundException(RpcHandler.class, requestClass);
+      throw new ObjectNotFoundException(RpcHandler.class.getSimpleName(), requestClass);
     }
-    return (R) handler.handle(request);
+    return handler;
   }
 
 }

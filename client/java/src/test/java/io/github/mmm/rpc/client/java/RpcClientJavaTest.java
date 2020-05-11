@@ -24,8 +24,11 @@ import io.github.mmm.rpc.response.RpcException;
 /**
  * Test of {@link RpcClientJava}.
  */
-public class RpcClientTest extends Assertions {
+public class RpcClientJavaTest extends Assertions {
 
+  /**
+   * Test {@link RpcClient} with {@link RpcInvocation#sendAsync(Consumer) asynchronous} communication.
+   */
   @Test
   public void testAsync() {
 
@@ -42,17 +45,16 @@ public class RpcClientTest extends Assertions {
     ((RpcClientJava) rpcClient).setServiceDiscovery(new TestServiceDiscovery(baseUrl));
     TestRequest request = new TestRequest();
     request.Id.set(4711L);
-    RpcInvocation<TestResult> call = rpcClient.call(request);
     ErrorHandler errorHandler = new ErrorHandler();
     ResponseHandler responseHandler = new ResponseHandler();
-    call.header(RpcInvocation.HEADER_AUTHORIZATION, "Basic d2lraTpwZWRpYQ==").errorHandler(errorHandler)
+    RpcInvocation<TestResult> invocation = rpcClient.call(request);
+    invocation.header(RpcInvocation.HEADER_AUTHORIZATION, "Basic d2lraTpwZWRpYQ==").errorHandler(errorHandler)
         .sendAsync(responseHandler);
     while ((responseHandler.response == null) && (errorHandler.error == null)) {
       try {
         Thread.sleep(100);
-      } catch (InterruptedException e1) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
+      } catch (InterruptedException e) {
+        fail(e.getMessage(), e);
       }
     }
     server.stop();
