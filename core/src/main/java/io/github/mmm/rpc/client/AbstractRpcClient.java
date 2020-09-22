@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+import io.github.mmm.marshall.JsonFormat;
 import io.github.mmm.marshall.StructuredFormat;
-import io.github.mmm.marshall.StructuredFormatFactory;
 import io.github.mmm.rpc.request.RpcRequest;
 import io.github.mmm.rpc.request.RpcServiceDiscovery;
 import io.github.mmm.rpc.response.RpcException;
@@ -45,7 +45,7 @@ public abstract class AbstractRpcClient implements RpcClient {
   public StructuredFormat getDefaultFormat() {
 
     if (this.defaultFormat == null) {
-      this.defaultFormat = StructuredFormatFactory.get().create(StructuredFormat.ID_JSON);
+      this.defaultFormat = JsonFormat.of();
     }
     return this.defaultFormat;
   }
