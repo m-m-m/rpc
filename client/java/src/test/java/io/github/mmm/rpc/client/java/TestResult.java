@@ -4,8 +4,8 @@ package io.github.mmm.rpc.client.java;
 
 import io.github.mmm.bean.AbstractBean;
 import io.github.mmm.bean.Bean;
+import io.github.mmm.property.number.integers.IntegerProperty;
 import io.github.mmm.property.string.StringProperty;
-import io.github.mmm.property.temporal.localdate.LocalDateProperty;
 
 /**
  *
@@ -14,7 +14,7 @@ public class TestResult extends Bean {
 
   public final StringProperty Name;
 
-  public final LocalDateProperty Birthday;
+  public final IntegerProperty Age;
 
   /**
    * The constructor.
@@ -34,7 +34,7 @@ public class TestResult extends Bean {
 
     super(writable, dynamic);
     this.Name = add().newString().withValidator().mandatory().and().build("Name");
-    this.Birthday = add().newLocalDate().withValidator().past().and().build("Birthday");
+    this.Age = add().newInteger("Age");
   }
 
 }
