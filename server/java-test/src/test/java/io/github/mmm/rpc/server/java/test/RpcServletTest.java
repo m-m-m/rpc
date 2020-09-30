@@ -2,8 +2,6 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.rpc.server.java.test;
 
-import java.time.LocalDate;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +12,7 @@ import io.github.mmm.rpc.client.AbstractRpcClient;
 import io.github.mmm.rpc.client.RpcClient;
 import io.github.mmm.rpc.client.RpcInvocation;
 import io.github.mmm.rpc.response.RpcDataResponse;
+import io.github.mmm.rpc.server.java.RpcServlet;
 
 /**
  * Test of {@link RpcServlet} via {@link TestRpcServlet} with spring-boot.
@@ -43,7 +42,7 @@ public class RpcServletTest extends Assertions {
     TestResult data = response.getData();
     assertThat(data).isNotNull();
     assertThat(data.Name.get()).isEqualTo("John Doe");
-    assertThat(data.Birthday.get()).isEqualTo(LocalDate.parse("1999-12-31"));
+    assertThat(data.Age.get()).isEqualTo(42);
   }
 
 }

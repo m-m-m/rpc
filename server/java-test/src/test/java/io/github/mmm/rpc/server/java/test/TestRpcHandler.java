@@ -2,8 +2,6 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.rpc.server.java.test;
 
-import java.time.LocalDate;
-
 import org.springframework.stereotype.Component;
 
 import io.github.mmm.rpc.server.RpcHandler;
@@ -26,7 +24,7 @@ public class TestRpcHandler implements RpcHandler<TestResult, TestRequest> {
     if (command.Id.getValue() == 4711) {
       TestResult result = new TestResult();
       result.Name.set("John Doe");
-      result.Birthday.set(LocalDate.of(1999, 12, 31));
+      result.Age.setValue(42);
       return result;
     }
     return null;
