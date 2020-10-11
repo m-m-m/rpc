@@ -47,7 +47,7 @@ public class RpcClientTvmTest extends Assertions {
 
     RpcClient rpcClient = RpcClient.get();
     assertThat(rpcClient).isInstanceOf(RpcClientTvm.class);
-    ((RpcClientTvm) rpcClient).setServiceDiscovery(new TestServiceDiscovery(baseUrl));
+    ((RpcClientTvm) rpcClient).setServiceDiscovery(baseUrl);
     TestRequest request = new TestRequest();
     request.Id.set(4711L);
     ErrorHandler errorHandler = new ErrorHandler();
