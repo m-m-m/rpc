@@ -1,8 +1,9 @@
 /* Copyright (c) The m-m-m Team, Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0 */
-package io.github.mmm.rpc.request;
+package io.github.mmm.rpc.discovery;
 
 import io.github.mmm.marshall.StructuredFormatProvider;
+import io.github.mmm.rpc.request.RpcRequest;
 
 /**
  * Interface to {@link #getUrl(RpcRequest, String) discover service URLs} for a {@link RpcRequest}.

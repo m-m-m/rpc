@@ -9,8 +9,8 @@ import java.util.function.Consumer;
 import io.github.mmm.base.i18n.Localizable;
 import io.github.mmm.marshall.Marshalling;
 import io.github.mmm.marshall.StructuredFormat;
+import io.github.mmm.rpc.discovery.RpcServiceDiscovery;
 import io.github.mmm.rpc.request.RpcRequest;
-import io.github.mmm.rpc.request.RpcServiceDiscovery;
 import io.github.mmm.rpc.response.AttributeReadHttpHeader;
 import io.github.mmm.rpc.response.RpcDataResponse;
 import io.github.mmm.rpc.response.RpcErrorData;
@@ -143,13 +143,13 @@ public abstract class AbstractRpcInvocation<D> implements RpcInvocation<D> {
       response = new RpcDataResponse<>(status, responseHeaders, data);
     } else {
       RpcErrorData errorData = new RpcErrorData();
+      Throwable cause = null;
       try {
         if (payload != null) {
           errorData.read(this.format.reader(payload));
         }
-      } catch (RuntimeException cause) {
-        // TODO log or attach as cause
-        cause.printStackTrace();
+      } catch (RuntimeException e) {
+        cause = e;
       }
       String message = errorData.getMessage();
       if ((message == null) || message.isEmpty()) {
@@ -159,7 +159,7 @@ public abstract class AbstractRpcInvocation<D> implements RpcInvocation<D> {
         }
       }
       error = new RpcResponseException(Localizable.ofStatic(status + ":" + message), status, responseHeaders,
-          errorData.isTechnical(), errorData.getCode(), errorData.getUuid());
+          errorData.isTechnical(), errorData.getCode(), cause, errorData.getUuid());
     }
     if (error != null) {
       if (async) {

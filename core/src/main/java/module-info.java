@@ -8,6 +8,9 @@
  * provide the service on the back-end you only need to implement a corresponding
  * {@link io.github.mmm.rpc.server.RpcHandler}. To invoke your service on the front-end you only need to use
  * {@link RpcClient} that supports asynchronous service invocation out of the box.
+ *
+ * @uses io.github.mmm.rpc.discovery.RpcServiceDiscovery
+ * @uses io.github.mmm.rpc.client.RpcClient
  */
 module io.github.mmm.rpc {
 
@@ -15,9 +18,11 @@ module io.github.mmm.rpc {
 
   uses io.github.mmm.rpc.client.RpcClient;
 
-  uses io.github.mmm.rpc.request.RpcServiceDiscovery;
+  uses io.github.mmm.rpc.discovery.RpcServiceDiscovery;
 
   exports io.github.mmm.rpc.client;
+
+  exports io.github.mmm.rpc.discovery;
 
   exports io.github.mmm.rpc.request;
 

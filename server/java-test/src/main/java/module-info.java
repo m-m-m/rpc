@@ -11,4 +11,8 @@ open module io.github.mmm.rpc.server.java.test {
 
   requires transitive io.github.mmm.rpc.client.java;
 
+  // requires java.servlet;
+
+  // requires javax.servlet.api;
+
 }

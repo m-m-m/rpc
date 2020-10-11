@@ -39,7 +39,7 @@ public class RpcErrorData implements MarshallableObject, UnmarshallableObject {
   public RpcErrorData() {
 
     super();
-    this.code = "RpcError";
+    this.code = RpcResponseException.CODE_DEFAULT;
     this.technical = true;
   }
 

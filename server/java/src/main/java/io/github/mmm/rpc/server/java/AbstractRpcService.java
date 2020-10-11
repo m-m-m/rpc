@@ -86,7 +86,10 @@ public class AbstractRpcService implements RpcService {
 
   private static String createPathMethod(String path, String method) {
 
-    return path + '@' + method;
+    if (path.startsWith("/")) {
+      return path + '@' + method;
+    }
+    return "/" + path + '@' + method;
   }
 
   @Override

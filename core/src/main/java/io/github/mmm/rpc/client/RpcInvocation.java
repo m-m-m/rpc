@@ -2,6 +2,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.rpc.client;
 
+import java.util.Base64;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
@@ -63,6 +64,18 @@ public interface RpcInvocation<D> {
    * @see AbstractRpcClient#setDefaultHeader(String, String)
    */
   RpcInvocation<D> header(String key, String value);
+
+  /**
+   * @param login the login of the user to authenticate.
+   * @param password the password of the user to authenticate.
+   * @return this object for fluent API calls.
+   */
+  default RpcInvocation<D> headerAuthBasic(String login, String password) {
+
+    String credentials = login + ":" + password;
+    String secret = Base64.getEncoder().encodeToString(credentials.getBytes());
+    return header(HEADER_AUTHORIZATION, "Basic " + secret);
+  }
 
   /**
    * Configures explicit HTTP headers to send with the request (e.g. for authentication).

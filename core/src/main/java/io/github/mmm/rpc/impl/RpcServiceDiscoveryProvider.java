@@ -5,7 +5,7 @@ package io.github.mmm.rpc.impl;
 import java.util.ServiceLoader;
 
 import io.github.mmm.base.config.ServiceHelper;
-import io.github.mmm.rpc.request.RpcServiceDiscovery;
+import io.github.mmm.rpc.discovery.RpcServiceDiscovery;
 
 /**
  * Provider for {@link RpcServiceDiscovery}.

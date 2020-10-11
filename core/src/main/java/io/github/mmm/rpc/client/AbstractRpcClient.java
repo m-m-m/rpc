@@ -9,8 +9,9 @@ import java.util.function.Consumer;
 
 import io.github.mmm.marshall.JsonFormat;
 import io.github.mmm.marshall.StructuredFormat;
+import io.github.mmm.rpc.discovery.RpcServiceDiscovery;
+import io.github.mmm.rpc.discovery.StaticServiceDiscovery;
 import io.github.mmm.rpc.request.RpcRequest;
-import io.github.mmm.rpc.request.RpcServiceDiscovery;
 import io.github.mmm.rpc.response.RpcException;
 
 /**
@@ -93,6 +94,14 @@ public abstract class AbstractRpcClient implements RpcClient {
   public void setServiceDiscovery(RpcServiceDiscovery serviceDiscovery) {
 
     this.serviceDiscovery = serviceDiscovery;
+  }
+
+  /**
+   * @param baseUrl the base URL to use for all services.
+   */
+  public void setServiceDiscovery(String baseUrl) {
+
+    setServiceDiscovery(new StaticServiceDiscovery(baseUrl));
   }
 
   /**

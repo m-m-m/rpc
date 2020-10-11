@@ -19,6 +19,9 @@ import io.github.mmm.base.i18n.Localizable;
  */
 public final class RpcResponseException extends RpcException {
 
+  /** Default {@link #getCode() code} if no error-code could be received from the server. */
+  public static final String CODE_DEFAULT = "RpcError";
+
   private static final long serialVersionUID = 1L;
 
   private final boolean technical;
@@ -33,13 +36,14 @@ public final class RpcResponseException extends RpcException {
    * @param headers the {@link #getHeader(String) headers}.
    * @param technical the {@link #isTechnical() technical} flag.
    * @param code the {@link #getCode() code}.
+   * @param cause is the {@link #getCause() cause} of this exception. May be <code>null</code>.
    * @param uuid the explicit {@link #getUuid() UUID} or <code>null</code> to initialize by default (from given
    *        {@link Throwable} or as new {@link UUID}).
    */
   public RpcResponseException(Localizable message, int status, AttributeReadHttpHeader headers, boolean technical,
-      String code, UUID uuid) {
+      String code, Throwable cause, UUID uuid) {
 
-    super(message, status, headers, null, uuid);
+    super(message, status, headers, cause, uuid);
     this.technical = technical;
     this.code = code;
   }

@@ -12,7 +12,12 @@ import io.github.mmm.rpc.client.AbstractRpcClient;
 import io.github.mmm.rpc.client.RpcClient;
 import io.github.mmm.rpc.client.RpcInvocation;
 import io.github.mmm.rpc.response.RpcDataResponse;
+import io.github.mmm.rpc.response.RpcResponseException;
 import io.github.mmm.rpc.server.java.RpcServlet;
+import io.github.mmm.rpc.server.java.test.app.TestApp;
+import io.github.mmm.rpc.server.java.test.app.TestRequest;
+import io.github.mmm.rpc.server.java.test.app.TestResult;
+import io.github.mmm.rpc.server.java.test.app.TestRpcServlet;
 
 /**
  * Test of {@link RpcServlet} via {@link TestRpcServlet} with spring-boot.
@@ -31,18 +36,39 @@ public class RpcServletTest extends Assertions {
 
     RpcClient rpcClient = RpcClient.get();
     assertThat(rpcClient).isInstanceOf(AbstractRpcClient.class);
-    ((AbstractRpcClient) rpcClient)
-        .setServiceDiscovery(new TestServiceDiscovery("http://localhost:" + this.port + "/services/rest/"));
+    ((AbstractRpcClient) rpcClient).setServiceDiscovery("http://localhost:" + this.port + "/services/rest/");
     TestRequest request = new TestRequest();
     request.Id.set(4711L);
     RpcInvocation<TestResult> invocation = rpcClient.call(request);
-    RpcDataResponse<TestResult> response = invocation
-        .header(RpcInvocation.HEADER_AUTHORIZATION, "Basic d2lraTpwZWRpYQ==").sendSync();
+    RpcDataResponse<TestResult> response = invocation.headerAuthBasic("rpc", "mmm").sendSync();
     assertThat(response.getStatus()).isEqualTo(200);
     TestResult data = response.getData();
     assertThat(data).isNotNull();
     assertThat(data.Name.get()).isEqualTo("John Doe");
     assertThat(data.Age.get()).isEqualTo(42);
+  }
+
+  /**
+   * Test with wrong password.
+   */
+  @Test
+  public void testInvalidCredentials() {
+
+    RpcClient rpcClient = RpcClient.get();
+    assertThat(rpcClient).isInstanceOf(AbstractRpcClient.class);
+    ((AbstractRpcClient) rpcClient).setServiceDiscovery("http://localhost:" + this.port + "/services/rest/");
+    TestRequest request = new TestRequest();
+    request.Id.set(4711L);
+    RpcInvocation<TestResult> invocation = rpcClient.call(request);
+    try {
+      // RpcDataResponse<TestResult> response =
+      invocation.headerAuthBasic("rpc", "invalid-password").sendSync();
+      failBecauseExceptionWasNotThrown(RpcResponseException.class);
+    } catch (RpcResponseException e) {
+      assertThat(e.getStatus()).isEqualTo(401);
+      assertThat(e.getCode()).isEqualTo(RpcResponseException.CODE_DEFAULT);
+      assertThat(e.getNlsMessage().getMessage()).isEqualTo("401:Unauthorized");
+    }
   }
 
 }
