@@ -43,7 +43,7 @@ public class RpcClientJavaTest extends Assertions {
 
       RpcClient rpcClient = RpcClient.get();
       assertThat(rpcClient).isInstanceOf(RpcClientJava.class);
-      ((RpcClientJava) rpcClient).setServiceDiscovery(new TestServiceDiscovery(baseUrl));
+      ((RpcClientJava) rpcClient).setServiceDiscovery(baseUrl);
       TestRequest request = new TestRequest();
       request.Id.set(4711L);
       RpcInvocation<TestResult> invocation = rpcClient.call(request);
