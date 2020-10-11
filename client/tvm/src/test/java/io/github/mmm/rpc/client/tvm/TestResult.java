@@ -2,18 +2,19 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.rpc.client.tvm;
 
-import io.github.mmm.bean.AbstractBean;
 import io.github.mmm.bean.Bean;
 import io.github.mmm.property.string.StringProperty;
 import io.github.mmm.property.temporal.localdate.LocalDateProperty;
 
 /**
- *
+ * RPC result {@link Bean} for testing.
  */
 public class TestResult extends Bean {
 
+  /** Full name of the person. */
   public final StringProperty Name;
 
+  /** Birthday of the person. */
   public final LocalDateProperty Birthday;
 
   /**
@@ -21,18 +22,7 @@ public class TestResult extends Bean {
    */
   public TestResult() {
 
-    this(null, false);
-  }
-
-  /**
-   * The constructor.
-   *
-   * @param writable
-   * @param dynamic
-   */
-  public TestResult(AbstractBean writable, boolean dynamic) {
-
-    super(writable, dynamic);
+    super();
     this.Name = add().newString().withValidator().mandatory().and().build("Name");
     this.Birthday = add().newLocalDate().withValidator().past().and().build("Birthday");
   }

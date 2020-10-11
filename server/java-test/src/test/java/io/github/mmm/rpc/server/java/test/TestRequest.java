@@ -2,16 +2,16 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.rpc.server.java.test;
 
-import io.github.mmm.bean.AbstractBean;
 import io.github.mmm.marshall.Marshalling;
 import io.github.mmm.property.number.longs.LongProperty;
 import io.github.mmm.rpc.request.RpcRequestBean;
 
 /**
- *
+ * {@link RpcRequestBean} for testing.
  */
 public class TestRequest extends RpcRequestBean<TestResult> {
 
+  /** Unique identifier. */
   public final LongProperty Id;
 
   /**
@@ -19,18 +19,7 @@ public class TestRequest extends RpcRequestBean<TestResult> {
    */
   public TestRequest() {
 
-    this(null, false);
-  }
-
-  /**
-   * The constructor.
-   *
-   * @param writable
-   * @param dynamic
-   */
-  public TestRequest(AbstractBean writable, boolean dynamic) {
-
-    super(writable, dynamic);
+    super();
     this.Id = add().newLong().withValidator().mandatory().and().build("Id");
   }
 

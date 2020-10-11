@@ -2,18 +2,19 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.rpc.server.java.test;
 
-import io.github.mmm.bean.AbstractBean;
 import io.github.mmm.bean.Bean;
 import io.github.mmm.property.number.integers.IntegerProperty;
 import io.github.mmm.property.string.StringProperty;
 
 /**
- *
+ * RPC result {@link Bean} for testing.
  */
 public class TestResult extends Bean {
 
+  /** Full name of the person. */
   public final StringProperty Name;
 
+  /** Age of the person. */
   public final IntegerProperty Age;
 
   /**
@@ -21,18 +22,7 @@ public class TestResult extends Bean {
    */
   public TestResult() {
 
-    this(null, false);
-  }
-
-  /**
-   * The constructor.
-   *
-   * @param writable
-   * @param dynamic
-   */
-  public TestResult(AbstractBean writable, boolean dynamic) {
-
-    super(writable, dynamic);
+    super();
     this.Name = add().newString().withValidator().mandatory().and().build("Name");
     this.Age = add().newInteger().withValidator().range(0, 200).and().build("Age");
   }
