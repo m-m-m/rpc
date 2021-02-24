@@ -23,15 +23,9 @@ public class RpcSaveRequest<E extends EntityBean> extends RpcCrudRequest<E, E> {
   }
 
   @Override
-  public String getPath() {
+  public String getOperation() {
 
-    return getEntity().getType().getSimpleName();
-  }
-
-  @Override
-  public String getPermission() {
-
-    return "Save." + getEntity().getType().getSimpleName();
+    return "Save";
   }
 
   @Override

@@ -5,6 +5,7 @@ package io.github.mmm.rpc.request;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import io.github.mmm.base.exception.ObjectNotFoundException;
 import io.github.mmm.marshall.Marshalling;
 import io.github.mmm.marshall.MarshallingObject;
 
@@ -27,9 +28,47 @@ public interface RpcRequest<D> extends HttpMethod {
   }
 
   /**
-   * @return the (relative) path of this command. May contain variables in the form {@code {«variable-name»}}.
+   * @return the path of this command (e.g. "/MyEntity/{id}"). May contain {@link #getPathVariable(String) variables} in
+   *         the form {@code {«variable-name»}}.
    */
-  String getPath();
+  String getPathPattern();
+
+  /**
+   * Feel free to override with a more efficient implementation for your final request implementation.
+   *
+   * @return the actual path value of this command with all {@link #getPathVariable(String) variables} resolved.
+   */
+  default String getPathValue() {
+
+    String path = getPathPattern();
+    int varStart = path.indexOf('{');
+    if (varStart < 0) {
+      return path;
+    }
+    int start = 0;
+    int length = path.length();
+    StringBuilder sb = new StringBuilder(length + 6);
+    while (varStart >= 0) {
+      sb.append(path.substring(start, varStart));
+      start = varStart + 1;
+      int varEnd = path.indexOf('}', start);
+      if (varEnd < start) {
+        throw new IllegalArgumentException(path);
+      }
+      String var = path.substring(start, varEnd);
+      String value = getPathVariable(var);
+      if (value == null) {
+        throw new ObjectNotFoundException("variable", var);
+      }
+      sb.append(value);
+      start = varEnd + 1;
+      varStart = path.indexOf('{', start);
+    }
+    if (start < length) {
+      sb.append(path.substring(start));
+    }
+    return sb.toString();
+  }
 
   /**
    * @param variables the {@link Map} with the variables.
@@ -42,18 +81,18 @@ public interface RpcRequest<D> extends HttpMethod {
   }
 
   /**
-   * @param key the name of the variable.
+   * @param name the name of the variable.
    * @param value the value of the variable as {@link String}.
    */
-  default void setPathVariable(String key, String value) {
+  default void setPathVariable(String name, String value) {
 
   }
 
   /**
-   * @param key the name of the variable.
+   * @param name the name of the variable.
    * @return the value of the variable as {@link String}.
    */
-  default String getPathVariable(String key) {
+  default String getPathVariable(String name) {
 
     return null;
   }

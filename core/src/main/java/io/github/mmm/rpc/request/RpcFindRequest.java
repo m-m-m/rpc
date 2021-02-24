@@ -51,15 +51,9 @@ public class RpcFindRequest<E extends EntityBean> extends RpcCrudIdRequest<E, E>
   }
 
   @Override
-  public String getPath() {
+  public String getOperation() {
 
-    return getEntity().getType().getStableName() + "/{id}";
-  }
-
-  @Override
-  public String getPermission() {
-
-    return "Find." + getEntity().getType().getStableName();
+    return "Find";
   }
 
   @SuppressWarnings({ "unchecked", "rawtypes" })

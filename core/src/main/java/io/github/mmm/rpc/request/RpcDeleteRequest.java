@@ -51,9 +51,9 @@ public class RpcDeleteRequest<E extends EntityBean> extends RpcCrudIdRequest<Voi
   }
 
   @Override
-  public String getPermission() {
+  public String getOperation() {
 
-    return "Delete." + getEntity().getType().getStableName();
+    return "Delete";
   }
 
   @Override

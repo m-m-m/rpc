@@ -29,7 +29,7 @@ public class RpcHandlerMap {
 
   /**
    * @param method the {@link io.github.mmm.rpc.request.RpcRequest#getMethod() HTTP method}.
-   * @param path the {@link io.github.mmm.rpc.request.RpcRequest#getPath() URL path}.
+   * @param path the {@link io.github.mmm.rpc.request.RpcRequest#getPathValue() URL path}.
    * @return the {@link RpcHandlerRequest} or {@code null} if no matching {@link io.github.mmm.rpc.server.RpcHandler}
    *         could be found.
    */

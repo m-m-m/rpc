@@ -37,6 +37,23 @@ public abstract class RpcCrudRequest<D, E extends EntityBean> implements RpcRequ
   }
 
   /**
+   * @return the CRUD operation name (e.g. "Find" or "Save").
+   */
+  protected abstract String getOperation();
+
+  @Override
+  public String getPermission() {
+
+    return getOperation() + "." + getEntity().getType().getStableName();
+  }
+
+  @Override
+  public String getPathPattern() {
+
+    return "/" + getEntity().getType().getStableName();
+  }
+
+  /**
    * @param <E> type of the {@link EntityBean}.
    * @param id the {@link Id}.
    * @return a new and empty {@link EntityBean} instance for the {@link Id#getType() type} of the given {@link Id}.

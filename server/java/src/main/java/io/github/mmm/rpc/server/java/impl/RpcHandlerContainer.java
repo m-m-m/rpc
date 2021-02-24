@@ -20,7 +20,7 @@ public class RpcHandlerContainer extends RpcHandlerRequest {
   public RpcHandlerContainer(RpcHandler<?, ?> handler) {
 
     super(handler, handler.createRequest());
-    this.path = new RpcPath(this.request.getPath());
+    this.path = new RpcPath(this.request.getPathPattern());
   }
 
   /**

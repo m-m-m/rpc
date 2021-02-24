@@ -24,7 +24,7 @@ public class TestRequest extends RpcRequestBean<TestResult> {
   }
 
   @Override
-  public String getPath() {
+  public String getPathPattern() {
 
     return "test/path";
   }

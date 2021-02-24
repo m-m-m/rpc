@@ -7,7 +7,7 @@ import java.util.Map;
 import io.github.mmm.rpc.request.RpcRequest;
 
 /**
- * A parsed {@link io.github.mmm.rpc.request.RpcRequest#getPath() RPC request path}.
+ * A parsed {@link io.github.mmm.rpc.request.RpcRequest#getPathPattern() RPC request path}.
  *
  * @since 1.0.0
  */
@@ -55,7 +55,7 @@ public class RpcPath {
 
   /**
    * @return the original path of this segment.
-   * @see io.github.mmm.rpc.request.RpcRequest#getPath()
+   * @see io.github.mmm.rpc.request.RpcRequest#getPathPattern()
    */
   public String getPath() {
 

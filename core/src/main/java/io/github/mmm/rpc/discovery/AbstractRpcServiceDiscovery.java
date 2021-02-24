@@ -16,7 +16,7 @@ public abstract class AbstractRpcServiceDiscovery implements RpcServiceDiscovery
    * @param request the {@link RpcRequest}.
    * @param format the {@link StructuredFormatProvider#getId() format name} used for marshalling and unmarshaling the
    *        data (request and response).
-   * @return the base URL to call excluding the {@link RpcRequest#getPath() request path}.
+   * @return the base URL to call excluding the {@link RpcRequest#getPathValue() request path}.
    */
   protected abstract String getBaseUrl(RpcRequest<?> request, String format);
 
@@ -32,7 +32,7 @@ public abstract class AbstractRpcServiceDiscovery implements RpcServiceDiscovery
     }
     // prevent double slashes as servers might reject for security reasons
     boolean baseSlash = baseUrl.endsWith("/");
-    String path = request.getPath();
+    String path = request.getPathValue();
     boolean pathSlash = path.startsWith("/");
     if (baseSlash && pathSlash) {
       return baseUrl + path.substring(1);

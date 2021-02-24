@@ -56,9 +56,9 @@ public abstract class RpcCrudIdRequest<D, E extends EntityBean> extends RpcCrudR
   }
 
   @Override
-  public String getPath() {
+  public String getPathPattern() {
 
-    return getEntity().getType().getSimpleName() + "/{id}";
+    return super.getPathPattern() + "/{id}";
   }
 
   @Override

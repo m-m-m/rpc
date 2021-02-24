@@ -4,6 +4,8 @@ package io.github.mmm.rpc.request;
 
 import io.github.mmm.bean.Bean;
 import io.github.mmm.marshall.MarshallingObject;
+import io.github.mmm.property.WritableProperty;
+import io.github.mmm.value.observable.object.WritableSimpleValue;
 
 /**
  * Implementation of {@link RpcRequest} as {@link Bean}.
@@ -26,6 +28,27 @@ public abstract class RpcRequestBean<D> extends Bean implements RpcRequest<D> {
   public MarshallingObject getRequestMarshalling() {
 
     return this;
+  }
+
+  @Override
+  public String getPathVariable(String name) {
+
+    Object value = get(name);
+    if (value != null) {
+      return value.toString();
+    }
+    return RpcRequest.super.getPathVariable(name);
+  }
+
+  @Override
+  public void setPathVariable(String name, String value) {
+
+    WritableProperty<?> property = getProperty(name);
+    if (property instanceof WritableSimpleValue) {
+      ((WritableSimpleValue<?>) property).setAsString(value);
+    } else {
+      RpcRequest.super.setPathVariable(name, value);
+    }
   }
 
 }
