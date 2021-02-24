@@ -24,4 +24,12 @@ public interface RpcResponse extends AttributeReadHttpHeader {
    */
   boolean isError();
 
+  /**
+   * @return {@code true} if successful, {@code false} in case of an {@link #isError() error}.
+   */
+  default boolean isSuccess() {
+
+    return !isError();
+  }
+
 }

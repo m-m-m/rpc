@@ -37,24 +37,7 @@ public class RpcServlet extends HttpServlet {
   protected void service(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    String path = request.getPathInfo();
-    if (path == null) {
-      path = request.getRequestURI().substring(request.getContextPath().length());
-    }
-    String contentType;
-    contentType = request.getContentType();
-    if (contentType == null) {
-      contentType = request.getHeader("Accept");
-    }
-    if (contentType != null) {
-      int index = contentType.indexOf(';');
-      if (index > 0) {
-        // strip stuff like charset (application/json; charset=UTF-8)
-        contentType = contentType.substring(0, index);
-      }
-    }
-    this.rpcService.handle(request.getMethod(), path, contentType, request.getReader(), response.getWriter(),
-        new HttpStatusSender(response));
+    this.rpcService.handle(new HttpServletRequestReader(request), new HttpServletResponseWriter(response));
   }
 
 }

@@ -2,6 +2,9 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.rpc.request;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import io.github.mmm.marshall.Marshalling;
 import io.github.mmm.marshall.MarshallingObject;
 
@@ -15,29 +18,45 @@ import io.github.mmm.marshall.MarshallingObject;
  * @see io.github.mmm.rpc.client.RpcClient#call(RpcRequest)
  * @see io.github.mmm.rpc.server.RpcHandler#handle(RpcRequest)
  */
-public interface RpcRequest<D> {
+public interface RpcRequest<D> extends HttpMethod {
 
-  /** {@link #getMethod() Method} {@value}. */
-  public static final String METHOD_POST = "POST";
-
-  /** {@link #getMethod() Method} {@value}. */
-  public static final String METHOD_GET = "GET";
-
-  /** {@link #getMethod() Method} {@value}. */
-  public static final String METHOD_DELETE = "DELETE";
-
-  /**
-   * @return the method to use (when sending via HTTP[S]).
-   */
+  @Override
   default String getMethod() {
 
     return METHOD_POST;
   }
 
   /**
-   * @return the (relative) path of this command.
+   * @return the (relative) path of this command. May contain variables in the form {@code {«variable-name»}}.
    */
   String getPath();
+
+  /**
+   * @param variables the {@link Map} with the variables.
+   */
+  default void setPathVariables(Map<String, String> variables) {
+
+    for (Entry<String, String> entry : variables.entrySet()) {
+      setPathVariable(entry.getKey(), entry.getValue());
+    }
+  }
+
+  /**
+   * @param key the name of the variable.
+   * @param value the value of the variable as {@link String}.
+   */
+  default void setPathVariable(String key, String value) {
+
+  }
+
+  /**
+   * @param key the name of the variable.
+   * @return the value of the variable as {@link String}.
+   */
+  default String getPathVariable(String key) {
+
+    return null;
+  }
 
   /**
    * @return the permission required to call this request.

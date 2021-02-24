@@ -11,11 +11,11 @@
   <packaging>jar</packaging>
   <name>${project.artifactId}</name>
   <description>RPC (remote procedure calls) made easy.</description>
-  
+
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>mmm-bean</artifactId>
+      <artifactId>mmm-entity-bean</artifactId>
     </dependency>
   </dependencies>
 </project>

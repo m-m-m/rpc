@@ -5,7 +5,8 @@ package io.github.mmm.rpc.client;
 import io.github.mmm.rpc.request.RpcRequest;
 
 /**
- * Interface to call a {@link RpcRequest} from the client.
+ * Interface to call a {@link RpcRequest} from the client easily. To avoid boilerplate coding and overhead for CRUD
+ * operations use {@link RpcCrudClient}.
  *
  * @since 1.0.0
  */
@@ -15,12 +16,12 @@ public interface RpcClient {
    * Prepares an {@link RpcInvocation} that can be completed by any {@code send*} method such as
    * {@link RpcInvocation#sendAsync(java.util.function.Consumer)}.
    *
-   * @param <R> type of the {@link io.github.mmm.rpc.response.RpcDataResponse#getData() response data}.
+   * @param <D> type of the {@link io.github.mmm.rpc.response.RpcDataResponse#getData() response data}.
    * @param request the {@link RpcRequest}.
    * @return the {@link RpcInvocation} to configure additional options and finally
    *         {@link RpcInvocation#sendAsync(java.util.function.Consumer) send} the request.
    */
-  <R> RpcInvocation<R> call(RpcRequest<R> request);
+  <D> RpcInvocation<D> call(RpcRequest<D> request);
 
   /**
    * Immediately invokes the given {@link RpcRequest} ignoring the response.

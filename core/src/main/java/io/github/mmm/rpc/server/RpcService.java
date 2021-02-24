@@ -2,10 +2,6 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.rpc.server;
 
-import java.io.Reader;
-import java.io.Writer;
-
-import io.github.mmm.marshall.StructuredFormatProvider;
 import io.github.mmm.rpc.request.RpcRequest;
 
 /**
@@ -23,37 +19,9 @@ public interface RpcService {
   <R> R handle(RpcRequest<R> request);
 
   /**
-   * @param method the HTTP method.
-   * @param path the {@link RpcRequest#getPath() request path}.
-   * @param format the {@link StructuredFormatProvider#getId() format name}.
-   * @param requestReader the {@link Reader} to read the request from.
-   * @param responseWriter the {@link Writer} to write the response to.
-   * @param statusSender the reciver of the HTTP status.
-   * @return the HTTP status code. It has also been {@link StatusSender#sendStatus(int) send} via the given
-   *         {@link StatusSender}.
+   * @param request the {@link HttpRequestReader} to read the request.
+   * @param response the {@link HttpResponseWriter} to write the response.
    */
-  int handle(String method, String path, String format, Reader requestReader, Writer responseWriter,
-      StatusSender statusSender);
-
-  /**
-   * Interface to send the status (abstracting {@code HttpResponse}).
-   */
-  @FunctionalInterface
-  interface StatusSender {
-
-    /**
-     * @param status the HTTP status to send.
-     */
-    default void sendStatus(int status) {
-
-      sendStatus(status, null);
-    }
-
-    /**
-     * @param status the HTTP status to send.
-     * @param statusText the optional status text.
-     */
-    void sendStatus(int status, String statusText);
-  }
+  void handle(HttpRequestReader request, HttpResponseWriter response);
 
 }

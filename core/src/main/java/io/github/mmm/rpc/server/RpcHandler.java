@@ -8,8 +8,8 @@ import io.github.mmm.rpc.request.RpcRequest;
  * This is the interface for the handler of a specific {@link RpcRequest}. Its implementation defines how to
  * {@link #handle(RpcRequest) handle} the command on the server-side.
  *
- * @param <D> is the type of the result of the {@link #handle(RpcRequest) invocation}.
- * @param <R> is the type of the specific {@link RpcRequest}.
+ * @param <D> type of the result of the {@link #handle(RpcRequest) invocation}.
+ * @param <R> type of the specific {@link RpcRequest}.
  * @since 1.0.0
  */
 public interface RpcHandler<D, R extends RpcRequest<D>> {
@@ -22,9 +22,9 @@ public interface RpcHandler<D, R extends RpcRequest<D>> {
   /**
    * This method invokes the given <code>command</code> and returns the result of the invocation.
    *
-   * @param command is the {@link RpcRequest} to handle.
-   * @return the result of the <code>command</code> invocation.
+   * @param request is the {@link RpcRequest} to handle.
+   * @return the {@link io.github.mmm.rpc.response.RpcDataResponse#getData() response data}.
    */
-  D handle(R command);
+  D handle(R request);
 
 }
