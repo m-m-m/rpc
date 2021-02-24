@@ -49,7 +49,7 @@
       <dependency>
         <groupId>${project.groupId}</groupId>
         <artifactId>mmm-entity-parent</artifactId>
-        <version>0.2.0-SNAPSHOT</version>
+        <version>${project.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
