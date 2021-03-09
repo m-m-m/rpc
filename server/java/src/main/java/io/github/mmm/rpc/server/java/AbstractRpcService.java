@@ -12,11 +12,13 @@ import org.slf4j.LoggerFactory;
 import io.github.mmm.base.exception.ApplicationException;
 import io.github.mmm.base.exception.DuplicateObjectException;
 import io.github.mmm.base.exception.ObjectNotFoundException;
+import io.github.mmm.marshall.JsonFormat;
 import io.github.mmm.marshall.MarshallableObject;
 import io.github.mmm.marshall.Marshalling;
 import io.github.mmm.marshall.StructuredFormat;
 import io.github.mmm.marshall.StructuredFormatFactory;
 import io.github.mmm.marshall.StructuredReader;
+import io.github.mmm.marshall.StructuredTextFormat;
 import io.github.mmm.marshall.StructuredWriter;
 import io.github.mmm.nls.exception.TechnicalErrorUserException;
 import io.github.mmm.rpc.request.RpcRequest;
@@ -103,9 +105,16 @@ public class AbstractRpcService implements RpcService {
 
     String mimeType = requestReader.getMimeType();
     StructuredFormat structuredFormat = StructuredFormatFactory.get().create(mimeType);
-    StructuredReader reader = structuredFormat.reader(requestReader.getReader());
+    StructuredReader reader;
+    if (structuredFormat.isText()) {
+      StructuredTextFormat textFormat = (StructuredTextFormat) structuredFormat;
+      reader = textFormat.reader(requestReader.getReader());
+    } else {
+      assert (structuredFormat.isBinary());
+      reader = structuredFormat.reader(requestReader.getInputStream());
+    }
     int status = 200;
-    try (StructuredWriter writer = structuredFormat.writer(responseWriter.getWriter())) {
+    try (StructuredWriter writer = createWriter(structuredFormat, responseWriter)) {
       request.getRequestMarshalling().read(reader);
       D response = handler.handle(request);
       if (response == null) {
@@ -126,10 +135,27 @@ public class AbstractRpcService implements RpcService {
       ApplicationException userError = TechnicalErrorUserException.convert(t);
       LOG.error("RpcHandler {} failed:", handler.getClass().getName(), userError);
       RpcErrorData errorData = RpcErrorData.of(userError);
-      String error = structuredFormat.write(errorData);
+      StructuredTextFormat textFormat;
+      if (structuredFormat.isText()) {
+        textFormat = (StructuredTextFormat) structuredFormat;
+      } else {
+        textFormat = JsonFormat.of();
+      }
+      String error = textFormat.write(errorData);
       status = 500;
       responseWriter.setStatus(status, error);
     }
+  }
+
+  private StructuredWriter createWriter(StructuredFormat structuredFormat, HttpResponseWriter responseWriter) {
+
+    if (structuredFormat.isText()) {
+      StructuredTextFormat textFormat = (StructuredTextFormat) structuredFormat;
+      return textFormat.writer(responseWriter.getWriter());
+    }
+    assert (structuredFormat.isBinary());
+    structuredFormat.writer(responseWriter.getOutputStream());
+    return null;
   }
 
   @Override

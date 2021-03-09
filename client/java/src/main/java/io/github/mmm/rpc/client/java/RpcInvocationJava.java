@@ -2,6 +2,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.rpc.client.java;
 
+import java.io.ByteArrayOutputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -18,6 +19,8 @@ import java.util.function.Consumer;
 import io.github.mmm.base.i18n.Localizable;
 import io.github.mmm.marshall.MarshallingObject;
 import io.github.mmm.marshall.StructuredFormat;
+import io.github.mmm.marshall.StructuredTextFormat;
+import io.github.mmm.marshall.StructuredWriter;
 import io.github.mmm.rpc.client.AbstractRpcInvocation;
 import io.github.mmm.rpc.client.RpcInvocation;
 import io.github.mmm.rpc.discovery.RpcServiceDiscovery;
@@ -64,13 +67,29 @@ public class RpcInvocationJava<R> extends AbstractRpcInvocation<R> {
     for (Entry<String, String> entry : this.headers.entrySet()) {
       builder = builder.header(entry.getKey(), entry.getValue());
     }
-    MarshallingObject requestMarshalling = this.request.getRequestMarshalling();
-    String payload = null;
-    if (requestMarshalling != null) {
-      payload = this.format.write(requestMarshalling);
-    }
-    BodyPublisher body = BodyPublishers.ofString(payload);
+    BodyPublisher body = createBody();
     this.httpRequest = builder.method(this.request.getMethod(), body).build();
+  }
+
+  private BodyPublisher createBody() {
+
+    MarshallingObject requestMarshalling = this.request.getRequestMarshalling();
+    if (requestMarshalling == null) {
+      return BodyPublishers.noBody();
+    }
+    if (this.format.isText()) {
+      String payload = ((StructuredTextFormat) this.format).write(requestMarshalling);
+      return BodyPublishers.ofString(payload);
+    } else {
+      assert (this.format.isBinary());
+      // HTTP Client streaming API to create BodyPublisher as out stream?
+      ByteArrayOutputStream baos = new ByteArrayOutputStream(128);
+      StructuredWriter writer = this.format.writer(baos);
+      requestMarshalling.write(writer);
+      writer.close();
+      byte[] payload = baos.toByteArray();
+      return BodyPublishers.ofByteArray(payload);
+    }
   }
 
   @Override

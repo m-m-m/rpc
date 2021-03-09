@@ -3,6 +3,7 @@
 package io.github.mmm.rpc.server.java;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +34,16 @@ public class HttpServletRequestReader implements HttpRequestReader {
 
     super();
     this.request = request;
+  }
+
+  @Override
+  public InputStream getInputStream() {
+
+    try {
+      return this.request.getInputStream();
+    } catch (IOException e) {
+      throw new RuntimeIoException(e);
+    }
   }
 
   @Override

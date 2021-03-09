@@ -16,6 +16,8 @@ module io.github.mmm.rpc {
 
   requires transitive io.github.mmm.entity.bean;
 
+  requires transitive reactor.core;
+
   uses io.github.mmm.rpc.client.RpcClient;
 
   uses io.github.mmm.rpc.discovery.RpcServiceDiscovery;
@@ -25,6 +27,8 @@ module io.github.mmm.rpc {
   exports io.github.mmm.rpc.discovery;
 
   exports io.github.mmm.rpc.request;
+
+  exports io.github.mmm.rpc.request.entity;
 
   exports io.github.mmm.rpc.response;
 

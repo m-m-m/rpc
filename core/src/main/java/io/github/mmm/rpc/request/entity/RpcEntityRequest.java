@@ -1,19 +1,20 @@
-package io.github.mmm.rpc.request;
+package io.github.mmm.rpc.request.entity;
 
 import java.util.Objects;
 
 import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.entity.bean.EntityBean;
 import io.github.mmm.entity.id.Id;
+import io.github.mmm.rpc.request.RpcRequest;
 
 /**
- * {@link RpcRequest} for CRUD operation.
+ * {@link RpcRequest} for a (CRUD) operation on an {@link EntityBean}.
  *
  * @param <D> type of {@link io.github.mmm.rpc.response.RpcDataResponse#getData() response data}.
  * @param <E> type of {@link EntityBean}.
  * @since 1.0.0
  */
-public abstract class RpcCrudRequest<D, E extends EntityBean> implements RpcRequest<D> {
+public abstract class RpcEntityRequest<D, E extends EntityBean> implements RpcRequest<D> {
 
   private final E entity;
 
@@ -22,7 +23,7 @@ public abstract class RpcCrudRequest<D, E extends EntityBean> implements RpcRequ
    *
    * @param entity the {@link #getEntity() entity}.
    */
-  public RpcCrudRequest(E entity) {
+  public RpcEntityRequest(E entity) {
 
     super();
     this.entity = entity;

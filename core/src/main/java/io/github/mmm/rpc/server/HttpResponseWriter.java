@@ -1,5 +1,6 @@
 package io.github.mmm.rpc.server;
 
+import java.io.OutputStream;
 import java.io.Writer;
 
 /**
@@ -7,6 +8,11 @@ import java.io.Writer;
  * {@code javax.servlet.http.HttpServletResponse}.
  */
 public interface HttpResponseWriter {
+
+  /**
+   * @return the {@link OutputStream} to write the response body.
+   */
+  OutputStream getOutputStream();
 
   /**
    * @return the {@link Writer} to write the response body.

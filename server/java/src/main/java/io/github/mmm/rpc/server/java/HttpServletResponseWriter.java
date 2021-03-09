@@ -3,6 +3,7 @@
 package io.github.mmm.rpc.server.java;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Writer;
 
 import javax.servlet.http.HttpServletResponse;
@@ -36,6 +37,16 @@ public class HttpServletResponseWriter implements HttpResponseWriter {
 
     super();
     this.response = response;
+  }
+
+  @Override
+  public OutputStream getOutputStream() {
+
+    try {
+      return this.response.getOutputStream();
+    } catch (IOException e) {
+      throw new RuntimeIoException(e);
+    }
   }
 
   @Override

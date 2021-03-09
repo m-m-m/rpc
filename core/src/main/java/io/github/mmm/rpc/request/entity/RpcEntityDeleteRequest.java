@@ -1,24 +1,24 @@
-package io.github.mmm.rpc.request;
+package io.github.mmm.rpc.request.entity;
 
 import io.github.mmm.entity.bean.EntityBean;
 import io.github.mmm.entity.id.Id;
 import io.github.mmm.marshall.Marshalling;
 
 /**
- * {@link RpcCrudRequest} for {@link io.github.mmm.rpc.client.RpcCrudClient#find(io.github.mmm.entity.id.Id) find}
+ * {@link RpcEntityRequest} for {@link io.github.mmm.rpc.client.RpcEntityClient#find(io.github.mmm.entity.id.Id) find}
  * operation.
  *
  * @param <E> type of {@link EntityBean}.
  * @since 1.0.0
  */
-public class RpcFindRequest<E extends EntityBean> extends RpcCrudIdRequest<E, E> {
+public class RpcEntityDeleteRequest<E extends EntityBean> extends RpcEntityIdRequest<Void, E> {
 
   /**
    * The constructor.
    *
    * @param id the {@link #getId() primary key} of the entity to find.
    */
-  public RpcFindRequest(Id<E> id) {
+  public RpcEntityDeleteRequest(Id<E> id) {
 
     super(id);
   }
@@ -29,7 +29,7 @@ public class RpcFindRequest<E extends EntityBean> extends RpcCrudIdRequest<E, E>
    * @param id the {@link #getId() primary key} of the entity to find.
    * @param entity the {@link #getEntity() entity} as prototype.
    */
-  public RpcFindRequest(Id<E> id, E entity) {
+  public RpcEntityDeleteRequest(Id<E> id, E entity) {
 
     super(id, entity);
   }
@@ -39,7 +39,7 @@ public class RpcFindRequest<E extends EntityBean> extends RpcCrudIdRequest<E, E>
    *
    * @param entity the {@link #getEntity() entity} as prototype.
    */
-  public RpcFindRequest(E entity) {
+  public RpcEntityDeleteRequest(E entity) {
 
     super(entity);
   }
@@ -47,20 +47,19 @@ public class RpcFindRequest<E extends EntityBean> extends RpcCrudIdRequest<E, E>
   @Override
   public String getMethod() {
 
-    return METHOD_GET;
+    return METHOD_DELETE;
   }
 
   @Override
   public String getOperation() {
 
-    return "Find";
+    return "Delete";
   }
 
-  @SuppressWarnings({ "unchecked", "rawtypes" })
   @Override
-  public Marshalling<E> getResponseMarshalling() {
+  public Marshalling<Void> getResponseMarshalling() {
 
-    return (Marshalling) getEntity().copy(false);
+    return null;
   }
 
 }

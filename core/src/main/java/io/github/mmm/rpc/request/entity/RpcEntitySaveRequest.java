@@ -1,23 +1,23 @@
-package io.github.mmm.rpc.request;
+package io.github.mmm.rpc.request.entity;
 
 import io.github.mmm.entity.bean.EntityBean;
 import io.github.mmm.marshall.Marshalling;
 import io.github.mmm.marshall.MarshallingObject;
 
 /**
- * {@link RpcCrudRequest} for {@link io.github.mmm.rpc.client.RpcCrudClient#save(EntityBean) save} operation.
+ * {@link RpcEntityRequest} for {@link io.github.mmm.rpc.client.RpcEntityClient#save(EntityBean) save} operation.
  *
  * @param <E> type of {@link EntityBean}.
  * @since 1.0.0
  */
-public class RpcSaveRequest<E extends EntityBean> extends RpcCrudRequest<E, E> {
+public class RpcEntitySaveRequest<E extends EntityBean> extends RpcEntityRequest<E, E> {
 
   /**
    * The constructor.
    *
    * @param entity the {@link #getEntity() entity} to save.
    */
-  public RpcSaveRequest(E entity) {
+  public RpcEntitySaveRequest(E entity) {
 
     super(entity);
   }

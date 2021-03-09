@@ -10,6 +10,7 @@ import org.teavm.jso.ajax.XMLHttpRequest;
 
 import io.github.mmm.marshall.MarshallingObject;
 import io.github.mmm.marshall.StructuredFormat;
+import io.github.mmm.marshall.StructuredTextFormat;
 import io.github.mmm.rpc.client.AbstractRpcInvocation;
 import io.github.mmm.rpc.client.RpcInvocation;
 import io.github.mmm.rpc.discovery.RpcServiceDiscovery;
@@ -112,7 +113,7 @@ public class RpcInvocationTvm<R> extends AbstractRpcInvocation<R> implements Att
     if (requestMarshalling == null) {
       this.xhr.send();
     } else {
-      String data = this.format.write(requestMarshalling);
+      String data = ((StructuredTextFormat) this.format).write(requestMarshalling);
       this.xhr.send(data);
     }
   }

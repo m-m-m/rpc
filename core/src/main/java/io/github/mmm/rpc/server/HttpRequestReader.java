@@ -1,5 +1,6 @@
 package io.github.mmm.rpc.server;
 
+import java.io.InputStream;
 import java.io.Reader;
 
 import io.github.mmm.marshall.StructuredFormatProvider;
@@ -20,6 +21,11 @@ public interface HttpRequestReader extends HttpMethod {
    * @return the path of the HTTP request relative to the context-root.
    */
   String getPath();
+
+  /**
+   * @return the {@link Reader} to read the request body.
+   */
+  InputStream getInputStream();
 
   /**
    * @return the {@link Reader} to read the request body.

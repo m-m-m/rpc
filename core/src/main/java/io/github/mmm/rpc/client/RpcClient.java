@@ -6,7 +6,7 @@ import io.github.mmm.rpc.request.RpcRequest;
 
 /**
  * Interface to call a {@link RpcRequest} from the client easily. To avoid boilerplate coding and overhead for CRUD
- * operations use {@link RpcCrudClient}.
+ * operations use {@link RpcEntityClient}.
  *
  * @since 1.0.0
  */
