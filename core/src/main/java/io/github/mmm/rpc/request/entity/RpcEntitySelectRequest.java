@@ -1,7 +1,7 @@
 package io.github.mmm.rpc.request.entity;
 
 import io.github.mmm.entity.bean.EntityBean;
-import io.github.mmm.entity.bean.sql.select.SelectStatement;
+import io.github.mmm.entity.bean.db.statement.select.SelectStatement;
 import io.github.mmm.marshall.Marshalling;
 import io.github.mmm.marshall.MarshallingObject;
 import reactor.core.publisher.Flux;
@@ -9,7 +9,7 @@ import reactor.core.publisher.Flux;
 /**
  * {@link RpcEntityRequest} for {@link io.github.mmm.rpc.client.RpcEntityClient#save(EntityBean) save} operation.
  *
- * @param <E> type of {@link EntityBean}.
+ * @param <E> type of the result.
  * @since 1.0.0
  */
 public class RpcEntitySelectRequest<E extends EntityBean> extends RpcEntityRequest<Flux<E>, E> {
@@ -23,7 +23,7 @@ public class RpcEntitySelectRequest<E extends EntityBean> extends RpcEntityReque
    */
   public RpcEntitySelectRequest(SelectStatement<E> select) {
 
-    super(select.getFrom().getEntity());
+    super(select.getSelect().getResultBean());
     this.statement = select;
   }
 
@@ -49,7 +49,6 @@ public class RpcEntitySelectRequest<E extends EntityBean> extends RpcEntityReque
     return null;
   }
 
-  @SuppressWarnings({ "unchecked", "rawtypes" })
   @Override
   public Marshalling<Flux<E>> getResponseMarshalling() {
 

@@ -14,7 +14,7 @@
  */
 module io.github.mmm.rpc {
 
-  requires transitive io.github.mmm.entity.bean;
+  requires transitive io.github.mmm.entity.db;
 
   requires transitive reactor.core;
 

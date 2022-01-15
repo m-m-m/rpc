@@ -3,7 +3,7 @@
 package io.github.mmm.rpc.impl;
 
 import io.github.mmm.entity.bean.EntityBean;
-import io.github.mmm.entity.bean.sql.select.SelectStatement;
+import io.github.mmm.entity.bean.db.statement.select.SelectStatement;
 import io.github.mmm.entity.id.Id;
 import io.github.mmm.rpc.client.RpcClient;
 import io.github.mmm.rpc.client.RpcEntityClient;

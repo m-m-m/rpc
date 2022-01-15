@@ -3,7 +3,7 @@
 package io.github.mmm.rpc.client;
 
 import io.github.mmm.entity.bean.EntityBean;
-import io.github.mmm.entity.bean.sql.select.SelectStatement;
+import io.github.mmm.entity.bean.db.statement.select.SelectStatement;
 import io.github.mmm.entity.id.Id;
 import reactor.core.publisher.Flux;
 
@@ -29,7 +29,7 @@ public interface RpcEntityClient extends RpcClient {
 
   /**
    * @param <E> type of the {@link EntityBean}.
-   * @param id the {@link Id primary key} of the requested {@link EntityBean}. Has to have a {@link Id#getType() type}.
+   * @param id the {@link Id primary key} of the requested {@link EntityBean}. Has to have a {@link Id#getEntityType() type}.
    * @return the {@link RpcInvocation} to configure additional options and finally
    *         {@link RpcInvocation#sendAsync(java.util.function.Consumer) send} the request to find. The
    *         {@link io.github.mmm.rpc.response.RpcDataResponse#getData() data from the received response} is the
@@ -40,7 +40,7 @@ public interface RpcEntityClient extends RpcClient {
   <E extends EntityBean> RpcInvocation<E> find(Id<E> id);
 
   /**
-   * @param id the {@link Id} of the {@link EntityBean} to delete. Has to have a {@link Id#getType() type}.
+   * @param id the {@link Id} of the {@link EntityBean} to delete. Has to have a {@link Id#getEntityType() type}.
    * @return the {@link RpcInvocation} to configure additional options and finally
    *         {@link RpcInvocation#sendAsync(java.util.function.Consumer) send} the request to delte. The
    *         {@link io.github.mmm.rpc.response.RpcDataResponse#getData() data from the received response} is
