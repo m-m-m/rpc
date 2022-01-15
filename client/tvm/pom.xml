@@ -16,13 +16,11 @@
     <dependency>
       <groupId>org.teavm</groupId>
       <artifactId>teavm-classlib</artifactId>
-      <version>0.7.0-dev-1090</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.teavm</groupId>
       <artifactId>teavm-junit</artifactId>
-      <version>0.7.0-dev-1090</version>
       <scope>test</scope>
     </dependency>
     <dependency>
