@@ -8,8 +8,8 @@ import io.github.mmm.entity.id.Id;
 import reactor.core.publisher.Flux;
 
 /**
- * Extends {@link RpcEntityClient} with (CRUD) operations on an {@link EntityBean} such as {@link #save(EntityBean)
- * save}, {@link #find(Id) find}, and {@link #delete(Id)}.
+ * Extends {@link RpcClient} with (CRUD) operations on an {@link EntityBean} such as {@link #save(EntityBean) save},
+ * {@link #find(Id) find}, and {@link #delete(Id)}.
  *
  * @since 1.0.0
  */
@@ -21,15 +21,16 @@ public interface RpcEntityClient extends RpcClient {
    * @return the {@link RpcInvocation} to configure additional options and finally
    *         {@link RpcInvocation#sendAsync(java.util.function.Consumer) send} the request to save. The
    *         {@link io.github.mmm.rpc.response.RpcDataResponse#getData() data from the received response} is the updated
-   *         {@link EntityBean} with server-side changes ({@link Id} assigned on create, {@link Id#getVersion() version}
-   *         updated, etc).
+   *         {@link EntityBean} with server-side changes ({@link Id} assigned on create, {@link Id#getRevision()
+   *         revision} updated, etc).
    * @see io.github.mmm.rpc.server.RpcEntityHandler#save(EntityBean)
    */
   <E extends EntityBean> RpcInvocation<E> save(E entity);
 
   /**
    * @param <E> type of the {@link EntityBean}.
-   * @param id the {@link Id primary key} of the requested {@link EntityBean}. Has to have a {@link Id#getEntityType() type}.
+   * @param id the {@link Id primary key} of the requested {@link EntityBean}. Has to have a {@link Id#getEntityType()
+   *        type}.
    * @return the {@link RpcInvocation} to configure additional options and finally
    *         {@link RpcInvocation#sendAsync(java.util.function.Consumer) send} the request to find. The
    *         {@link io.github.mmm.rpc.response.RpcDataResponse#getData() data from the received response} is the
