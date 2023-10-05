@@ -12,8 +12,8 @@
   <name>${project.artifactId}</name>
   <description>Servers for mmm-rpc.</description>
   <properties>
-    <spring.boot.version>2.2.7.RELEASE</spring.boot.version>
-    <spring.version>5.0.8.RELEASE</spring.version>
+    <spring.boot.version>3.1.4</spring.boot.version>
+    <spring.version>6.0.12</spring.version>
     <tomcat.version>10.0.0-M4</tomcat.version>
   </properties>
 

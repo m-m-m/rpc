@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import io.github.mmm.rpc.server.RpcHandler;
 
 /**
- *
+ * Implementation of {@link RpcHandler} of {@link TestRequest}.
  */
 @Component
 public class TestRpcHandler implements RpcHandler<TestResult, TestRequest> {

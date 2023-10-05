@@ -6,13 +6,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.mmm.base.exception.RuntimeIoException;
 import io.github.mmm.rpc.server.HttpResponseWriter;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Implementation of {@link HttpResponseWriter} wrapping {@link HttpServletResponse}.

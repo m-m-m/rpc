@@ -6,10 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 
-import javax.servlet.http.HttpServletRequest;
-
 import io.github.mmm.base.exception.RuntimeIoException;
 import io.github.mmm.rpc.server.HttpRequestReader;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Implementation of {@link HttpRequestReader} wrapping {@link HttpServletRequest}.

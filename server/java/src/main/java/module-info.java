@@ -9,9 +9,7 @@ open module io.github.mmm.rpc.server.java {
 
   requires transitive io.github.mmm.rpc;
 
-  // requires java.servlet;
-
-  requires javax.servlet.api;
+  requires jakarta.servlet;
 
   exports io.github.mmm.rpc.server.java;
 

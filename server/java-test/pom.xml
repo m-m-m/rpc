@@ -26,16 +26,9 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>mmm-rpc-client-java</artifactId>
     </dependency>
-    <!--
-      <dependency>
+    <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
-      <scope>provided</scope>
-      </dependency>
-    -->
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -85,12 +78,11 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.30</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.2.3</version>
+      <version>1.4.11</version>
     </dependency>
   </dependencies>
 </project>
