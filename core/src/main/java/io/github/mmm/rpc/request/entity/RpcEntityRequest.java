@@ -57,12 +57,12 @@ public abstract class RpcEntityRequest<D, E extends EntityBean> implements RpcRe
   /**
    * @param <E> type of the {@link EntityBean}.
    * @param id the {@link Id}.
-   * @return a new and empty {@link EntityBean} instance for the {@link Id#getEntityType() type} of the given {@link Id}.
+   * @return a new and empty {@link EntityBean} instance for the {@link Id#getEntityClass() type} of the given {@link Id}.
    */
   protected static <E extends EntityBean> E createEntity(Id<E> id) {
 
     Objects.requireNonNull(id, "id");
-    Class<E> type = id.getEntityType();
+    Class<E> type = id.getEntityClass();
     Objects.requireNonNull(type, "id.type");
     return BeanFactory.get().create(type);
   }
