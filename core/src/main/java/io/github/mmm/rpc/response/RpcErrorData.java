@@ -9,13 +9,15 @@ import io.github.mmm.marshall.MarshallableObject;
 import io.github.mmm.marshall.StructuredReader;
 import io.github.mmm.marshall.StructuredWriter;
 import io.github.mmm.marshall.UnmarshallableObject;
+import io.github.mmm.marshall.id.StructuredIdMapping;
+import io.github.mmm.marshall.id.StructuredIdMappingObject;
 
 /**
  * Simple container to marshall and unmarshall {@link ApplicationException errors}.
  *
  * @since 1.0.0
  */
-public class RpcErrorData implements MarshallableObject, UnmarshallableObject {
+public class RpcErrorData implements MarshallableObject, UnmarshallableObject, StructuredIdMappingObject {
 
   private static final String PROPERTY_MESSAGE = "message";
 
@@ -111,46 +113,50 @@ public class RpcErrorData implements MarshallableObject, UnmarshallableObject {
   @Override
   public void write(StructuredWriter writer) {
 
-    writer.writeStartObject();
+    writer.writeStartObject(this);
     writer.writeName(PROPERTY_MESSAGE);
     writer.writeValueAsString(this.message);
-    writer.writeName(PROPERTY_CODE);
-    writer.writeValueAsString(this.code);
+    if (!RpcResponseException.CODE_DEFAULT.equals(this.code)) {
+      writer.writeName(PROPERTY_CODE);
+      writer.writeValueAsString(this.code);
+    }
     if (this.uuid != null) {
       writer.writeName(PROPERTY_UUID);
       writer.writeValueAsString(this.uuid.toString());
     }
-    writer.writeName(PROPERTY_TECHNICAL);
-    writer.writeValueAsBoolean(this.technical);
+    if (!this.technical) {
+      writer.writeName(PROPERTY_TECHNICAL);
+      writer.writeValueAsBoolean(Boolean.FALSE);
+    }
     writer.writeEnd();
   }
 
   @Override
-  public void read(StructuredReader reader) {
+  public RpcErrorData read(StructuredReader reader) {
 
-    if (reader.readStartObject()) {
+    if (reader.readStartObject(this)) {
       while (!reader.readEnd()) {
-        String name = reader.readName();
-        switch (name) {
-          case PROPERTY_MESSAGE:
-            setMessage(reader.readValueAsString());
-            break;
-          case PROPERTY_CODE:
-            setCode(reader.readValueAsString());
-            break;
-          case PROPERTY_UUID:
-            setUuid(UUID.fromString(reader.readValueAsString()));
-            break;
-          case PROPERTY_TECHNICAL:
-            setTechnical(reader.readValueAsBoolean());
-            break;
-          default:
-            // ignore unknown property for compatibility...
-            reader.readValue();
-            break;
+        if (reader.isName(PROPERTY_MESSAGE)) {
+          setMessage(reader.readValueAsString());
+        } else if (reader.isName(PROPERTY_CODE)) {
+          setCode(reader.readValueAsString());
+        } else if (reader.isName(PROPERTY_UUID)) {
+          setUuid(UUID.fromString(reader.readValueAsString()));
+        } else if (reader.isName(PROPERTY_TECHNICAL)) {
+          setTechnical(reader.readValueAsBoolean().booleanValue());
+        } else {
+          reader.readName();
+          reader.skipValue();
         }
       }
     }
+    return this;
+  }
+
+  @Override
+  public StructuredIdMapping defineIdMapping() {
+
+    return StructuredIdMapping.of(PROPERTY_MESSAGE, PROPERTY_CODE, PROPERTY_UUID, PROPERTY_TECHNICAL);
   }
 
   /**

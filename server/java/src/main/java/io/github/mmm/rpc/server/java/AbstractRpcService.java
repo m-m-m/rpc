@@ -12,9 +12,9 @@ import org.slf4j.LoggerFactory;
 import io.github.mmm.base.exception.ApplicationException;
 import io.github.mmm.base.exception.DuplicateObjectException;
 import io.github.mmm.base.exception.ObjectNotFoundException;
-import io.github.mmm.marshall.JsonFormat;
 import io.github.mmm.marshall.MarshallableObject;
 import io.github.mmm.marshall.Marshalling;
+import io.github.mmm.marshall.StandardFormat;
 import io.github.mmm.marshall.StructuredFormat;
 import io.github.mmm.marshall.StructuredFormatFactory;
 import io.github.mmm.marshall.StructuredReader;
@@ -139,7 +139,7 @@ public class AbstractRpcService implements RpcService {
       if (structuredFormat.isText()) {
         textFormat = (StructuredTextFormat) structuredFormat;
       } else {
-        textFormat = JsonFormat.of();
+        textFormat = StandardFormat.json();
       }
       String error = textFormat.write(errorData);
       status = 500;
