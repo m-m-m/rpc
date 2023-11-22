@@ -1,8 +1,8 @@
 package io.github.mmm.rpc.server;
 
 import io.github.mmm.entity.bean.EntityBean;
-import io.github.mmm.entity.bean.db.statement.select.SelectStatement;
 import io.github.mmm.entity.id.Id;
+import io.github.mmm.orm.statement.select.SelectStatement;
 import reactor.core.publisher.Flux;
 
 /**
