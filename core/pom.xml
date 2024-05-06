@@ -17,9 +17,5 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>mmm-orm</artifactId>
     </dependency>
-    <dependency>
-      <groupId>io.projectreactor</groupId>
-      <artifactId>reactor-core</artifactId>
-    </dependency>
   </dependencies>
 </project>

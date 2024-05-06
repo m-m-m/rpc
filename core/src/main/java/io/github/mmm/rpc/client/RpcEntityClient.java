@@ -5,7 +5,6 @@ package io.github.mmm.rpc.client;
 import io.github.mmm.entity.bean.EntityBean;
 import io.github.mmm.entity.id.Id;
 import io.github.mmm.orm.statement.select.SelectStatement;
-import reactor.core.publisher.Flux;
 
 /**
  * Extends {@link RpcClient} with (CRUD) operations on an {@link EntityBean} such as {@link #save(EntityBean) save},
@@ -59,10 +58,10 @@ public interface RpcEntityClient extends RpcClient {
    * @param statement the {@link SelectStatement} to select.
    * @return the {@link RpcInvocation} to configure additional options and finally
    *         {@link RpcInvocation#sendAsync(java.util.function.Consumer) send} the request to select. The
-   *         {@link io.github.mmm.rpc.response.RpcDataResponse#getData() data from the received response} is a
-   *         {@link Flux} of the selected {@link EntityBean} for reactive support.
+   *         {@link io.github.mmm.rpc.response.RpcDataResponse#getData() data from the received response} is an
+   *         {@link Iterable} of the selected {@link EntityBean} for reactive support.
    */
-  <E extends EntityBean> RpcInvocation<Flux<E>> select(SelectStatement<E> statement);
+  <E extends EntityBean> RpcInvocation<Iterable<E>> select(SelectStatement<E> statement);
 
   /**
    * @return the instance of this {@link RpcEntityClient}.
