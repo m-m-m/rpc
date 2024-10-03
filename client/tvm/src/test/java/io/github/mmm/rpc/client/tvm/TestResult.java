@@ -4,7 +4,7 @@ package io.github.mmm.rpc.client.tvm;
 
 import io.github.mmm.bean.Bean;
 import io.github.mmm.property.string.StringProperty;
-import io.github.mmm.property.temporal.localdate.LocalDateProperty;
+import io.github.mmm.property.time.localdate.LocalDateProperty;
 
 /**
  * RPC result {@link Bean} for testing.
