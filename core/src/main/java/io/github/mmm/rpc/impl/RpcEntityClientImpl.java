@@ -13,7 +13,6 @@ import io.github.mmm.rpc.request.entity.RpcEntityDeleteRequest;
 import io.github.mmm.rpc.request.entity.RpcEntityFindRequest;
 import io.github.mmm.rpc.request.entity.RpcEntitySaveRequest;
 import io.github.mmm.rpc.request.entity.RpcEntitySelectRequest;
-import reactor.core.publisher.Flux;
 
 /**
  * Implementation of {@link RpcEntityClient}.
@@ -62,7 +61,7 @@ public class RpcEntityClientImpl implements RpcEntityClient {
   }
 
   @Override
-  public <E extends EntityBean> RpcInvocation<Flux<E>> select(SelectStatement<E> statement) {
+  public <E extends EntityBean> RpcInvocation<Iterable<E>> select(SelectStatement<E> statement) {
 
     return call(new RpcEntitySelectRequest<>(statement));
   }

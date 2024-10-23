@@ -38,7 +38,7 @@ public class RpcEntitySaveRequest<E extends EntityBean> extends RpcEntityRequest
   @Override
   public Marshalling<E> getResponseMarshalling() {
 
-    return (Marshalling) getEntity().copy(false);
+    return (Marshalling) getEntity().copy();
   }
 
 }

@@ -60,7 +60,7 @@ public class RpcEntityFindRequest<E extends EntityBean> extends RpcEntityIdReque
   @Override
   public Marshalling<E> getResponseMarshalling() {
 
-    return (Marshalling) getEntity().copy(false);
+    return (Marshalling) getEntity().copy();
   }
 
 }

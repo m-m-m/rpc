@@ -16,8 +16,6 @@ module io.github.mmm.rpc {
 
   requires transitive io.github.mmm.orm;
 
-  requires transitive reactor.core;
-
   uses io.github.mmm.rpc.client.RpcClient;
 
   uses io.github.mmm.rpc.discovery.RpcServiceDiscovery;

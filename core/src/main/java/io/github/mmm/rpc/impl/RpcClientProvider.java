@@ -4,7 +4,7 @@ package io.github.mmm.rpc.impl;
 
 import java.util.ServiceLoader;
 
-import io.github.mmm.base.config.ServiceHelper;
+import io.github.mmm.base.service.ServiceHelper;
 import io.github.mmm.rpc.client.RpcClient;
 
 /**

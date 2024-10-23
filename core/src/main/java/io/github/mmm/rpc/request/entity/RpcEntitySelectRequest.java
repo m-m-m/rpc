@@ -4,7 +4,6 @@ import io.github.mmm.entity.bean.EntityBean;
 import io.github.mmm.marshall.Marshalling;
 import io.github.mmm.marshall.MarshallingObject;
 import io.github.mmm.orm.statement.select.SelectStatement;
-import reactor.core.publisher.Flux;
 
 /**
  * {@link RpcEntityRequest} for {@link io.github.mmm.rpc.client.RpcEntityClient#save(EntityBean) save} operation.
@@ -12,7 +11,7 @@ import reactor.core.publisher.Flux;
  * @param <E> type of the result.
  * @since 1.0.0
  */
-public class RpcEntitySelectRequest<E extends EntityBean> extends RpcEntityRequest<Flux<E>, E> {
+public class RpcEntitySelectRequest<E extends EntityBean> extends RpcEntityRequest<Iterable<E>, E> {
 
   private SelectStatement<E> statement;
 
@@ -50,7 +49,7 @@ public class RpcEntitySelectRequest<E extends EntityBean> extends RpcEntityReque
   }
 
   @Override
-  public Marshalling<Flux<E>> getResponseMarshalling() {
+  public Marshalling<Iterable<E>> getResponseMarshalling() {
 
     // TODO
     return null;
