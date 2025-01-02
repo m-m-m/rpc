@@ -7,7 +7,7 @@
  * model. Providing an {@link io.github.mmm.rpc.request.RpcRequest} is all you need to define your service API. To
  * provide the service on the back-end you only need to implement a corresponding
  * {@link io.github.mmm.rpc.server.RpcHandler}. To invoke your service on the front-end you only need to use
- * {@link RpcClient} that supports asynchronous service invocation out of the box.
+ * {@link io.github.mmm.rpc.client.RpcClient} that supports asynchronous service invocation out of the box.
  *
  * @uses io.github.mmm.rpc.discovery.RpcServiceDiscovery
  * @uses io.github.mmm.rpc.client.RpcClient
