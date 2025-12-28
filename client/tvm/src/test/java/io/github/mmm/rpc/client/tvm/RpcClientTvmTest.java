@@ -29,13 +29,13 @@ import io.github.mmm.rpc.response.RpcException;
  */
 @RunWith(TeaVMTestRunner.class)
 @SkipJVM
-public class RpcClientTvmTest extends Assertions {
+class RpcClientTvmTest extends Assertions {
 
   /**
    * Test {@link RpcClient} with {@link RpcInvocation#sendAsync(Consumer) asynchronous} communication.
    */
   @Test
-  public void testAsync() {
+  void testAsync() {
 
     WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());
     server.start();

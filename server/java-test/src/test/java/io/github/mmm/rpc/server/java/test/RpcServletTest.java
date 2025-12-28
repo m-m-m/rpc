@@ -23,7 +23,7 @@ import io.github.mmm.rpc.server.java.test.app.TestRpcServlet;
  * Test of {@link RpcServlet} via {@link TestRpcServlet} with spring-boot.
  */
 @SpringBootTest(classes = TestApp.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-public class RpcServletTest extends Assertions {
+class RpcServletTest extends Assertions {
 
   @LocalServerPort
   private int port;
@@ -32,7 +32,7 @@ public class RpcServletTest extends Assertions {
    * Use {@link RpcClient} to invoke the servlet that has been launched by spring-boot as a background server.
    */
   @Test
-  public void testService() {
+  void testService() {
 
     RpcClient rpcClient = RpcClient.get();
     assertThat(rpcClient).isInstanceOf(AbstractRpcClient.class);
@@ -52,7 +52,7 @@ public class RpcServletTest extends Assertions {
    * Test with wrong password.
    */
   @Test
-  public void testInvalidCredentials() {
+  void testInvalidCredentials() {
 
     RpcClient rpcClient = RpcClient.get();
     assertThat(rpcClient).isInstanceOf(AbstractRpcClient.class);

@@ -12,11 +12,11 @@ import io.github.mmm.property.string.StringProperty;
 /**
  * Test of {@link RpcRequest}.
  */
-public class RpcRequestTest extends Assertions {
+class RpcRequestTest extends Assertions {
 
   /** Test of {@link RpcRequest#getPathValue()}. */
   @Test
-  public void testGetPathValue() {
+  void testGetPathValue() {
 
     // arrange
     TestRequest request = new TestRequest();
@@ -30,7 +30,7 @@ public class RpcRequestTest extends Assertions {
 
   /** Test of {@link RpcRequest#setPathVariables(Map)}. */
   @Test
-  public void testSetPathVariables() {
+  void testSetPathVariables() {
 
     // arrange
     TestRequest request = new TestRequest();
