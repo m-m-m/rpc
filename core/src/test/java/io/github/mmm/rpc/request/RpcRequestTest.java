@@ -18,13 +18,13 @@ public class RpcRequestTest extends Assertions {
   @Test
   public void testGetPathValue() {
 
-    // given
+    // arrange
     TestRequest request = new TestRequest();
     request.Name.set("Foo");
     request.Id.setValue(4711);
-    // when
+    // act
     String path = request.getPathValue();
-    // then
+    // assert
     assertThat(path).isEqualTo("/prefix/Foo/4711/suffix");
   }
 
@@ -32,12 +32,12 @@ public class RpcRequestTest extends Assertions {
   @Test
   public void testSetPathVariables() {
 
-    // given
+    // arrange
     TestRequest request = new TestRequest();
     Map<String, String> map = Map.of("Name", "Foo", "Id", "4711");
-    // when
+    // act
     request.setPathVariables(map);
-    // then
+    // assert
     assertThat(request.Name.get()).isEqualTo("Foo");
     assertThat(request.Id.get()).isEqualTo(4711);
   }
