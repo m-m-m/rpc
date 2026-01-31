@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
       - name: Set up JDK
@@ -14,4 +14,4 @@ jobs:
           java-version: '25'
           distribution: 'temurin'
       - name: Build project with Maven
-        run: mvn -B -ntp install
+        run: mvn -B -ntp -Dstyle.color=always install

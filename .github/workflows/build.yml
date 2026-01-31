@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
       - name: Set up JDK
@@ -16,9 +16,9 @@ jobs:
           java-version: '25'
           distribution: 'temurin'
       - name: Build project with Maven
-        run: mvn -B -ntp install
+        run: mvn -B -ntp -Dstyle.color=always install
       - name: Deploy to OSSRH
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-        run: mvn -B -ntp --settings .mvn/settings.xml -DskipTests=true -Dmaven.install.skip=true deploy
+        run: mvn -B -ntp -Dstyle.color=always --settings .mvn/settings.xml -DskipTests=true -Dmaven.install.skip=true deploy
