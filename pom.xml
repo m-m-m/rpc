@@ -29,7 +29,7 @@
     <dependencies>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>mmm-orm-parent</artifactId>
+        <artifactId>mmm-db-parent</artifactId>
         <version>${project.version}</version>
         <type>pom</type>
         <scope>import</scope>

@@ -15,7 +15,7 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>mmm-orm</artifactId>
+      <artifactId>mmm-db-orm</artifactId>
     </dependency>
   </dependencies>
 </project>

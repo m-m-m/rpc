@@ -1,9 +1,9 @@
 package io.github.mmm.rpc.request.entity;
 
+import io.github.mmm.db.statement.select.SelectStatement;
 import io.github.mmm.entity.bean.EntityBean;
 import io.github.mmm.marshall.Marshalling;
 import io.github.mmm.marshall.MarshallingObject;
-import io.github.mmm.orm.statement.select.SelectStatement;
 
 /**
  * {@link RpcEntityRequest} for {@link io.github.mmm.rpc.client.RpcEntityClient#save(EntityBean) save} operation.

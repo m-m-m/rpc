@@ -2,9 +2,9 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.rpc.impl;
 
+import io.github.mmm.db.statement.select.SelectStatement;
 import io.github.mmm.entity.bean.EntityBean;
 import io.github.mmm.entity.id.Id;
-import io.github.mmm.orm.statement.select.SelectStatement;
 import io.github.mmm.rpc.client.RpcClient;
 import io.github.mmm.rpc.client.RpcEntityClient;
 import io.github.mmm.rpc.client.RpcInvocation;

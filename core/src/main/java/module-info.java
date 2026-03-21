@@ -14,7 +14,7 @@
  */
 module io.github.mmm.rpc {
 
-  requires transitive io.github.mmm.orm;
+  requires transitive io.github.mmm.db.orm;
 
   uses io.github.mmm.rpc.client.RpcClient;
 

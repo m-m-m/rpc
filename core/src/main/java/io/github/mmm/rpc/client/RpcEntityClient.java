@@ -2,9 +2,9 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.rpc.client;
 
+import io.github.mmm.db.statement.select.SelectStatement;
 import io.github.mmm.entity.bean.EntityBean;
 import io.github.mmm.entity.id.Id;
-import io.github.mmm.orm.statement.select.SelectStatement;
 
 /**
  * Extends {@link RpcClient} with (CRUD) operations on an {@link EntityBean} such as {@link #save(EntityBean) save},
